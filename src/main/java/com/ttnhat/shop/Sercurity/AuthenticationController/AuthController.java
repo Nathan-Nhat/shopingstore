@@ -1,5 +1,6 @@
 package com.ttnhat.shop.Sercurity.AuthenticationController;
 
+import com.ttnhat.shop.ExceptionHandler.ErrorType;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 import com.ttnhat.shop.Sercurity.JWT.JWTRespone.JwtObject;
 import com.ttnhat.shop.Sercurity.JWT.JWTUtils.IJwtUtils;
@@ -37,11 +38,11 @@ public class AuthController {
         }
         catch (BadCredentialsException e)
         {
-            throw new UsernameNotFoundException("Cannot found username");
+            throw new UsernameNotFoundException(ErrorType.USER_NOTFOUND.toString());
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(usersEntity.getUsername());
-        final IJwtUtils  jwtUtils = new JwtUtilsImplement(userDetails);
-        final JwtObject jwtObject = new JwtObject(jwtUtils.generateJwtToken());
+        final IJwtUtils  jwtUtils = new JwtUtilsImplement();
+        final JwtObject jwtObject = new JwtObject(jwtUtils.generateJwtToken(userDetails));
         return ResponseEntity.ok(jwtObject);
     }
  }

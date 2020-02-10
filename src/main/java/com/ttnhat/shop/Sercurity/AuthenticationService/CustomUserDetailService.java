@@ -1,5 +1,6 @@
 package com.ttnhat.shop.Sercurity.AuthenticationService;
 
+import com.ttnhat.shop.ExceptionHandler.ErrorType;
 import com.ttnhat.shop.Sercurity.AuthenticateDAO.IUserRepository;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UsersEntity> userEntityOptional = userRepository.findByUsername(username);
         UsersEntity userEntity = userEntityOptional
-                .orElseThrow(()->new UsernameNotFoundException("Cannot found user : " + username));
+                .orElseThrow(()->new UsernameNotFoundException(ErrorType.USER_NOTFOUND.toString()));
         UserDetails userDetails = new CustomsUserDetaill(userEntity);
         return userDetails;
     }

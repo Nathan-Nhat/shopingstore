@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface IJwtUtils {
 
-    String generateJwtToken();
+    String generateJwtToken(UserDetails userDetails);
     String extractUsername(String token);
-    List<String> extractRoles(String token);
+    String extractRoles(String token);
     boolean validateToken(String token, UserDetails userDetails);
 }
