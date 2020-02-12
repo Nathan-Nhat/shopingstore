@@ -29,7 +29,7 @@ public class ExceptionHandlerImp extends ResponseEntityExceptionHandler {
         Date date = new Date();
         ExceptionMessageObject exceptionObject = new ExceptionMessageObject(
                 date, HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase(),
-                ErrorType.USER_NOTFOUND.toString(), ex.getMessage(), path, this.getDebugLog(ex)
+                ErrorType.USER_NOTFOUND.toString(), ex.getMessage(), path, new DebugLog(ex).getLog()
         );
 
         return new ResponseEntity<ExceptionMessageObject>(
@@ -45,7 +45,7 @@ public class ExceptionHandlerImp extends ResponseEntityExceptionHandler {
         Date date = new Date();
         ExceptionMessageObject exceptionObject = new ExceptionMessageObject(
                 date, HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase(),
-                ErrorType.INVALID_JWT_TOKEN.toString(), ex.getMessage(), path, this.getDebugLog(ex)
+                ErrorType.INVALID_JWT_TOKEN.toString(), ex.getMessage(), path, new DebugLog(ex).getLog()
         );
 
         return new ResponseEntity<ExceptionMessageObject>(
@@ -53,13 +53,5 @@ public class ExceptionHandlerImp extends ResponseEntityExceptionHandler {
                 new HttpHeaders(),
                 HttpStatus.FORBIDDEN
         );
-    }
-
-    private String getDebugLog(Exception ex){
-        StackTraceElement stackTraceElements = ex.getStackTrace()[0];
-        List<String> list = Arrays.asList(stackTraceElements.getClassName(), stackTraceElements.getMethodName(),
-                ":line : " + (Integer.toString(stackTraceElements.getLineNumber())));
-        String s = String.join("/", list);
-        return s;
     }
 }

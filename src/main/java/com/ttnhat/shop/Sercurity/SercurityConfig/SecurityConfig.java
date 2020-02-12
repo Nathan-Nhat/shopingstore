@@ -1,5 +1,7 @@
 package com.ttnhat.shop.Sercurity.SercurityConfig;
 
+import com.ttnhat.shop.Sercurity.JWT.JWTFilter.JwtFilter;
+import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,16 +14,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
+    private Filter jwtFilter;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService){
+    public SecurityConfig(UserDetailsService userDetailsService, Filter jwtFilter){
         this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
     }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,8 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
-                .antMatchers("/api/customer/**").hasAnyRole("CUSTOMER", "ADMIN");
+                .antMatchers("/api/admin/*").hasAuthority("ADMIN")
+                .antMatchers("/api/customer/*").hasAnyAuthority("CUSTOMER", "ADMIN");
+        http.addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

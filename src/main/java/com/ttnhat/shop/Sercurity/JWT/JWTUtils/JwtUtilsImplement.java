@@ -4,12 +4,14 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 public class JwtUtilsImplement implements IJwtUtils {
     Logger logger = LoggerFactory.getLogger(JwtUtilsImplement.class);
     private static final String SECRET_KEY = "SECRET_KEY";
@@ -44,7 +46,7 @@ public class JwtUtilsImplement implements IJwtUtils {
         return Jwts.builder().setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 5))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60*10))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
