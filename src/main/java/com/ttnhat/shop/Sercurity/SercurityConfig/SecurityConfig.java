@@ -37,12 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests()
+        http.csrf().disable()
+                .cors().and()
+                .authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/api/admin/*").hasAuthority("ADMIN")
-                .antMatchers("/api/customer/*").hasAnyAuthority("CUSTOMER", "ADMIN");
-        http.addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/api/customer/*").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .and()
+                .addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
