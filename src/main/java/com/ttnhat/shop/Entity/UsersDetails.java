@@ -1,6 +1,8 @@
 package com.ttnhat.shop.Entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 
 import javax.persistence.*;
@@ -21,6 +23,8 @@ public class UsersDetails {
     private String address;
     @Column(name = "avatar_url")
     private String avatarUrl;
+
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UsersEntity userId;
