@@ -29,7 +29,7 @@ public class AuthController {
         this.userDetailsService = userDetailsService;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin
     @PostMapping("/authenticate")
     public ResponseEntity<?> getJwtToken(@RequestBody UsersEntity usersEntity){
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

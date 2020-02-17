@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IAdminService {
     Page<UsersEntity> getAllUserByPage(Integer pageNum, Integer pageSize);
+    UsersEntity getUserByUserName(String username);
+    UsersEntity updateUser(UsersEntity user);
 }

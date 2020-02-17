@@ -4,9 +4,15 @@ import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public interface IUsersRepository extends JpaRepository<UsersEntity, Integer> {
     Page<UsersEntity> findAll(Pageable pageable);
+    Optional<UsersEntity> findByUsername(String username);
+    UsersEntity save(UsersEntity usersEntity);
 }

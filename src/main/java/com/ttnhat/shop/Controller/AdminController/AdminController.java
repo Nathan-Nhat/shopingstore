@@ -30,11 +30,20 @@ public class AdminController {
         return ResponseEntity.ok(mapperEntity);
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping(value = "/all-users")
     public ResponseEntity<Page<UsersEntity>> getAllUserByPage(@RequestParam(name = "page")Integer pageNum,
                                                           @RequestParam(name = "size") Integer pageSize)
     {
         Page<UsersEntity> usersEntityList = adminService.getAllUserByPage(pageNum, pageSize);
         return ResponseEntity.ok(usersEntityList);
+    }
+
+    @GetMapping(value = "/user/{username}")
+    public ResponseEntity<UsersEntity> getUserByUserName(@PathVariable(name = "username") String username){
+        return ResponseEntity.ok(adminService.getUserByUserName(username));
+    }
+    @PutMapping(value = "/user/")
+    public ResponseEntity<UsersEntity> upDateUser(@RequestBody UsersEntity usersEntity){
+        return ResponseEntity.ok(adminService.updateUser(usersEntity));
     }
 }

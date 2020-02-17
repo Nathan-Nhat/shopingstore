@@ -2,6 +2,7 @@ package com.ttnhat.shop.Entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "customer_order")
@@ -16,11 +17,15 @@ public class CustomerOrder {
     @JoinColumn(name = "customer_username", referencedColumnName = "username")
     private UsersDetails usersDetails;
 
+    @OneToMany(mappedBy = "customerOrder")
+    private List<OrderedProduct> orderedProductList;
+
     public CustomerOrder() {
     }
-    public CustomerOrder(Date dateCreate, UsersDetails usersDetails) {
+    public CustomerOrder(Date dateCreate, UsersDetails usersDetails, List<OrderedProduct> orderedProductList) {
         this.usersDetails =  usersDetails;
         this.dateCreate = dateCreate;
+        this.orderedProductList = orderedProductList;
     }
 
     public Integer getId() {
@@ -35,6 +40,10 @@ public class CustomerOrder {
         return usersDetails;
     }
 
+    public List<OrderedProduct> getOrderedProductList() {
+        return orderedProductList;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -45,6 +54,10 @@ public class CustomerOrder {
 
     public void setUsersDetails(UsersDetails usersDetails) {
         this.usersDetails = usersDetails;
+    }
+
+    public void setOrderedProductList(List<OrderedProduct> orderedProductList) {
+        this.orderedProductList = orderedProductList;
     }
 
     @Override
