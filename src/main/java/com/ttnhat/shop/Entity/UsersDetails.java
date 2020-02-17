@@ -21,17 +21,13 @@ public class UsersDetails {
     private String address;
     @Column(name = "avatar_url")
     private String avatarUrl;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UsersEntity userId;
 
-    @OneToMany(mappedBy = "usersDetails", fetch = FetchType.LAZY)
-    private List<CustomerOrder> customerOrderList;
-
     public UsersDetails() {
     }
-    public UsersDetails(String username, String name, String email, String phone, String address, String avatarUrl, UsersEntity usersEntity,
-                        List<CustomerOrder> customerOrderList){
+    public UsersDetails(String username, String name, String email, String phone, String address, String avatarUrl, UsersEntity usersEntity){
         this.username = username;
         this.name = name;
         this.email = email;
@@ -39,7 +35,6 @@ public class UsersDetails {
         this.address = address;
         this.avatarUrl = avatarUrl;
         this.userId = usersEntity;
-        this.customerOrderList = customerOrderList;
     }
 
     public String getUsername() {
@@ -70,10 +65,6 @@ public class UsersDetails {
         return userId;
     }
 
-    public List<CustomerOrder> getCustomerOrderList() {
-        return customerOrderList;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -100,10 +91,6 @@ public class UsersDetails {
 
     public void setUserId(UsersEntity userId) {
         this.userId = userId;
-    }
-
-    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
-        this.customerOrderList = customerOrderList;
     }
 
     @Override

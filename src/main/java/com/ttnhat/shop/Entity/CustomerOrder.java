@@ -1,8 +1,9 @@
 package com.ttnhat.shop.Entity;
 
+import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "customer_order")
@@ -15,17 +16,13 @@ public class CustomerOrder {
     private Date dateCreate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_username", referencedColumnName = "username")
-    private UsersDetails usersDetails;
-
-    @OneToMany(mappedBy = "customerOrder")
-    private List<OrderedProduct> orderedProductList;
+    private UsersEntity usersEntity;
 
     public CustomerOrder() {
     }
-    public CustomerOrder(Date dateCreate, UsersDetails usersDetails, List<OrderedProduct> orderedProductList) {
-        this.usersDetails =  usersDetails;
+    public CustomerOrder(Date dateCreate, UsersEntity usersDetails) {
+        this.usersEntity =  usersDetails;
         this.dateCreate = dateCreate;
-        this.orderedProductList = orderedProductList;
     }
 
     public Integer getId() {
@@ -36,12 +33,8 @@ public class CustomerOrder {
         return dateCreate;
     }
 
-    public UsersDetails getUsersDetails() {
-        return usersDetails;
-    }
-
-    public List<OrderedProduct> getOrderedProductList() {
-        return orderedProductList;
+    public UsersEntity getUsersDetails() {
+        return usersEntity;
     }
 
     public void setId(Integer id) {
@@ -52,12 +45,8 @@ public class CustomerOrder {
         this.dateCreate = dateCreate;
     }
 
-    public void setUsersDetails(UsersDetails usersDetails) {
-        this.usersDetails = usersDetails;
-    }
-
-    public void setOrderedProductList(List<OrderedProduct> orderedProductList) {
-        this.orderedProductList = orderedProductList;
+    public void setUsersDetails(UsersEntity usersEntity) {
+        this.usersEntity = usersEntity;
     }
 
     @Override
@@ -65,7 +54,7 @@ public class CustomerOrder {
         return "CustomerOrder{" +
                 "id=" + id +
                 ", dateCreate=" + dateCreate +
-                ", usersDetails=" + usersDetails +
+                ", usersDetails=" + usersEntity +
                 '}';
     }
 }

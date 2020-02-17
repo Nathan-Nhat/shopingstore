@@ -1,12 +1,16 @@
 package com.ttnhat.shop.Sercurity.Entity;
 
+import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.UsersDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class UsersEntity {
+public class UsersEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "id")
@@ -19,16 +23,20 @@ public class UsersEntity {
     private String password;
     @Column(name = "roles")
     private String roles;
-//    @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY)
-//    private UsersDetails userDetails;
+    @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private UsersDetails userDetails;
     @Column(name = "status")
     private String status;
     public UsersEntity(){};
-    public UsersEntity(String username, String password, String roles, String status) {
+    @OneToMany(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CustomerOrder> customerOrderList;
+    public UsersEntity(String username, String password, String roles, String status, UsersDetails userDetails,
+                       List<CustomerOrder> customerOrderList) {
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.status = status;
+        this.customerOrderList = customerOrderList;
     }
 
     public Integer getId() {
@@ -51,6 +59,10 @@ public class UsersEntity {
         return status;
     }
 
+    public List<CustomerOrder> getCustomerOrderList() {
+        return customerOrderList;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -67,16 +79,20 @@ public class UsersEntity {
         this.roles = roles;
     }
 
-//    public UsersDetails getUserDetails() {
-//        return userDetails;
-//    }
+    public UsersDetails getUserDetails() {
+        return userDetails;
+    }
 
-//    public void setUserDetails(UsersDetails userDetails) {
-//        this.userDetails = userDetails;
-//    }
+    public void setUserDetails(UsersDetails userDetails) {
+        this.userDetails = userDetails;
+    }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
+        this.customerOrderList = customerOrderList;
     }
 
     @Override
