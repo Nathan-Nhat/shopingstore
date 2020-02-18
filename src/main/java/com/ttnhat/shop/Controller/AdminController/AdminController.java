@@ -38,11 +38,11 @@ public class AdminController {
         return ResponseEntity.ok(usersEntityList);
     }
 
-    @GetMapping(value = "/user/{username}")
+    @GetMapping(value = "/users/{username}")
     public ResponseEntity<UsersEntity> getUserByUserName(@PathVariable(name = "username") String username){
         return ResponseEntity.ok(adminService.getUserByUserName(username));
     }
-    @PutMapping(value = "/user/")
+    @PutMapping(value = "/users/")
     public ResponseEntity<UsersEntity> upDateUser(@RequestBody UsersEntity usersEntity){
         return ResponseEntity.ok(adminService.updateUser(usersEntity));
     }

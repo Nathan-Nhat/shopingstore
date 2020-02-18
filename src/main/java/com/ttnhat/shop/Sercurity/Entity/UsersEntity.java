@@ -26,11 +26,11 @@ public class UsersEntity implements Serializable {
     @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UsersDetails userDetails;
     @Column(name = "status")
-    private String status;
+    private Integer status;
     public UsersEntity(){};
     @OneToMany(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrderList;
-    public UsersEntity(String username, String password, String roles, String status, UsersDetails userDetails,
+    public UsersEntity(String username, String password, String roles, Integer status, UsersDetails userDetails,
                        List<CustomerOrder> customerOrderList) {
         this.username = username;
         this.password = password;
@@ -55,7 +55,7 @@ public class UsersEntity implements Serializable {
         return roles;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
@@ -87,7 +87,7 @@ public class UsersEntity implements Serializable {
         this.userDetails = userDetails;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

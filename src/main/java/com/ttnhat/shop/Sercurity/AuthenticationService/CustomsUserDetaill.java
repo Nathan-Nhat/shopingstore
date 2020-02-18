@@ -48,7 +48,7 @@ public class CustomsUserDetaill implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        if (this.usersEntity.getStatus().equals("ACTIVE"))
+        if (this.usersEntity.getStatus() == 1)
         {
             return true;
         }
