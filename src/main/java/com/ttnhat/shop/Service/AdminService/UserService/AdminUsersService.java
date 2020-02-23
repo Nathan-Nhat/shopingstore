@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Service.AdminService;
+package com.ttnhat.shop.Service.AdminService.UserService;
 
 import com.ttnhat.shop.DAO.NormalDAO.IUsersRepository;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AdminService implements IAdminService {
+public class AdminUsersService implements IAdminUsersService {
     @Autowired
     private IUsersRepository usersRepository;
     @Override
@@ -30,11 +30,13 @@ public class AdminService implements IAdminService {
     public UsersEntity updateUser(UsersEntity user) {
         Optional<UsersEntity> optionalUsersEntity = usersRepository.findByUsername(user.getUsername());
         UsersEntity usersEntity = optionalUsersEntity.orElseThrow(()->new UsernameNotFoundException("Username not found"));
-        if (!usersEntity.getRoles().equals("ADMIN")) {
-            usersEntity.setRoles(user.getRoles());
-            usersEntity.setStatus(user.getStatus());
-            usersRepository.save(usersEntity);
-        }
+            if (usersEntity.getRoles() != "ADMIN") {
+                usersEntity.setStatus(user.getStatus());
+                usersRepository.save(usersEntity);
+            }
+            else {
+                throw new UsernameNotFoundException("Error Index Roles");
+            }
         return usersEntity;
     }
 }

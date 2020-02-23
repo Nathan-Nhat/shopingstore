@@ -2,6 +2,7 @@ package com.ttnhat.shop.Entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ordered_product")
@@ -51,5 +52,20 @@ public class OrderedProduct implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderedProduct that = (OrderedProduct) o;
+        return Objects.equals(customerOrder, that.customerOrder) &&
+                Objects.equals(product, that.product) &&
+                Objects.equals(quantity, that.quantity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(customerOrder, product, quantity);
     }
 }

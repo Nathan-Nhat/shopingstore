@@ -1,6 +1,7 @@
 package com.ttnhat.shop.Entity;
 
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,13 +16,13 @@ public class CustomerOrder {
     @Column(name = "date_create")
     private Date dateCreate;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_username", referencedColumnName = "username")
-    private UsersEntity usersEntity;
+    @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
+    private UsersDetails usersDetails;
 
     public CustomerOrder() {
     }
-    public CustomerOrder(Date dateCreate, UsersEntity usersDetails) {
-        this.usersEntity =  usersDetails;
+    public CustomerOrder(Date dateCreate, UsersDetails usersDetails) {
+        this.usersDetails =  usersDetails;
         this.dateCreate = dateCreate;
     }
 
@@ -33,8 +34,8 @@ public class CustomerOrder {
         return dateCreate;
     }
 
-    public UsersEntity getUsersDetails() {
-        return usersEntity;
+    public UsersDetails getUsersDetails() {
+        return usersDetails;
     }
 
     public void setId(Integer id) {
@@ -45,8 +46,8 @@ public class CustomerOrder {
         this.dateCreate = dateCreate;
     }
 
-    public void setUsersDetails(UsersEntity usersEntity) {
-        this.usersEntity = usersEntity;
+    public void setUsersDetails(UsersDetails usersDetails) {
+        this.usersDetails = usersDetails;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class CustomerOrder {
         return "CustomerOrder{" +
                 "id=" + id +
                 ", dateCreate=" + dateCreate +
-                ", usersDetails=" + usersEntity +
+                ", usersDetails=" + usersDetails +
                 '}';
     }
 }

@@ -1,7 +1,5 @@
 package com.ttnhat.shop.Entity;
 
-import org.springframework.core.annotation.Order;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -10,9 +8,8 @@ import java.util.List;
 @Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private String id;
     @Column(name = "name")
     private String name;
     @Column(name = "price")
@@ -25,8 +22,14 @@ public class Product {
     private Integer numOrdered;
     @Column(name = "num_click")
     private Integer numClick;
-    @Column(name = "hot")
-    private String hot;
+    @Column(name = "url_image_main")
+    private String imageMain;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ImageDetailProduct> imageDetailProduct;
+
+    @Column(name = "date_create")
+    private Date dateCreate;
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
@@ -36,20 +39,23 @@ public class Product {
 
     public Product(String name, String price, String description, Date lastUpdate,
                    Integer numOrdered, Integer numClick, String hot, Category category,
-                   List<OrderedProduct> orderedProductList) {
+                   List<OrderedProduct> orderedProductList, String imageMain, List<ImageDetailProduct> imageDetailProduct,
+                   Date dateCreate) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.lastUpdate = lastUpdate;
         this.numOrdered = numOrdered;
         this.numClick = numClick;
-        this.hot = hot;
+        this.imageMain = imageMain;
         this.category = category;
         this.orderedProductList = orderedProductList;
+        this.imageDetailProduct = imageDetailProduct;
+        this.dateCreate = dateCreate;
     }
     public Product(){};
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -77,8 +83,16 @@ public class Product {
         return numClick;
     }
 
-    public String getHot() {
-        return hot;
+    public String getImageMain() {
+        return imageMain;
+    }
+
+    public List<ImageDetailProduct> getImageDetailProduct() {
+        return imageDetailProduct;
+    }
+
+    public Date getDateCreate() {
+        return dateCreate;
     }
 
     public Category getCategory() {
@@ -89,7 +103,7 @@ public class Product {
         return orderedProductList;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -117,10 +131,6 @@ public class Product {
         this.numClick = numClick;
     }
 
-    public void setHot(String hot) {
-        this.hot = hot;
-    }
-
     public void setCategory(Category category) {
         this.category = category;
     }
@@ -129,6 +139,17 @@ public class Product {
         this.orderedProductList = orderedProductList;
     }
 
+    public void setImageDetailProduct(List<ImageDetailProduct> imageDetailProduct) {
+        this.imageDetailProduct = imageDetailProduct;
+    }
+
+    public void setImageMain(String imageMain) {
+        this.imageMain = imageMain;
+    }
+
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
     @Override
     public String toString() {
         return "Product{" +
@@ -139,7 +160,9 @@ public class Product {
                 ", lastUpdate=" + lastUpdate +
                 ", numOrdered=" + numOrdered +
                 ", numClick=" + numClick +
-                ", hot='" + hot + '\'' +
+                ", imageMain='" + imageMain + '\'' +
+                ", category=" + category +
+                ", orderedProductList=" + orderedProductList +
                 '}';
     }
 }

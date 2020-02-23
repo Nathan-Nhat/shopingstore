@@ -20,7 +20,7 @@ public class JwtUtilsImplement implements IJwtUtils {
     public String generateJwtToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         String roles = String.join(",",userDetails.getAuthorities().stream()
-                .map(role -> role.getAuthority().toString()).collect(Collectors.toList()));
+                .map(role -> role.getAuthority()).collect(Collectors.toList()));
         claims.put("roles", roles);
         logger.info(roles);
         return createToken(claims, userDetails.getUsername());
@@ -46,7 +46,7 @@ public class JwtUtilsImplement implements IJwtUtils {
         return Jwts.builder().setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60*60*20))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60*60*10))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 

@@ -6,6 +6,7 @@ import com.ttnhat.shop.ExceptionHandler.ErrorType;
 import com.ttnhat.shop.ExceptionHandler.ExceptionMessageObject;
 import com.ttnhat.shop.Sercurity.JWT.JWTUtils.JwtUtilsImplement;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,19 @@ public class JwtFilter extends OncePerRequestFilter {
                 ExceptionMessageObject exceptionMessageObject = new ExceptionMessageObject(
                         date, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                         ErrorType.EXPIRED_JWT_TOKEN.toString(), e.getMessage(), path, new DebugLog(e).getLog()
+                );
+                ConvertObjectToJson convertObjectToJson = new ConvertObjectToJson(exceptionMessageObject);
+                response.setContentType("application/json");
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(convertObjectToJson.convert());
+            }
+            catch (SignatureException e)
+            {
+                Date date = new Date();
+                String path = request.getServletPath();
+                ExceptionMessageObject exceptionMessageObject = new ExceptionMessageObject(
+                        date, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                        ErrorType.INVALID_JWT_TOKEN.toString(), e.getMessage(), path, new DebugLog(e).getLog()
                 );
                 ConvertObjectToJson convertObjectToJson = new ConvertObjectToJson(exceptionMessageObject);
                 response.setContentType("application/json");

@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Service.AdminService;
+package com.ttnhat.shop.Service.AdminService.UserService;
 
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 import org.springframework.data.domain.Page;
@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import java.awt.print.Pageable;
 import java.util.List;
 
-public interface IAdminService {
+public interface IAdminUsersService {
     Page<UsersEntity> getAllUserByPage(Integer pageNum, Integer pageSize);
     UsersEntity getUserByUserName(String username);
     UsersEntity updateUser(UsersEntity user);

@@ -1,6 +1,8 @@
 package com.ttnhat.shop.Entity;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
@@ -9,10 +11,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user_details")
-public class UsersDetails {
-    @Id
-    @Column(name = "username")
-    private String username;
+public class UsersDetails implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Column(name = "name")
     private String name;
     @Column(name = "email")
@@ -24,26 +24,27 @@ public class UsersDetails {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @JsonIgnore
+    @Id
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UsersEntity userId;
+    @JsonIgnore
+    private UsersEntity usersEntity;
 
+    @OneToMany(mappedBy = "usersDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CustomerOrder> customerOrderList;
     public UsersDetails() {
     }
-    public UsersDetails(String username, String name, String email, String phone, String address, String avatarUrl, UsersEntity usersEntity){
-        this.username = username;
+
+    public UsersDetails(String name, String email, String phone, String address, String avatarUrl, UsersEntity usersEntity, List<CustomerOrder> customerOrderList){
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.avatarUrl = avatarUrl;
-        this.userId = usersEntity;
+        this.usersEntity = usersEntity;
+        this.customerOrderList = customerOrderList;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public String getName() {
         return name;
@@ -65,12 +66,12 @@ public class UsersDetails {
         return avatarUrl;
     }
 
-    public UsersEntity getUserId() {
-        return userId;
+    public UsersEntity getUsersEntity() {
+        return usersEntity;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public List<CustomerOrder> getCustomerOrderList() {
+        return customerOrderList;
     }
 
     public void setName(String name) {
@@ -93,20 +94,42 @@ public class UsersDetails {
         this.avatarUrl = avatarUrl;
     }
 
-    public void setUserId(UsersEntity userId) {
-        this.userId = userId;
+    public void setUsersEntity(UsersEntity usersEntity) {
+        this.usersEntity = usersEntity;
+    }
+
+    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
+        this.customerOrderList = customerOrderList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsersDetails that = (UsersDetails) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(phone, that.phone) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(avatarUrl, that.avatarUrl) &&
+                Objects.equals(usersEntity, that.usersEntity) &&
+                Objects.equals(customerOrderList, that.customerOrderList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, phone, address, avatarUrl, usersEntity, customerOrderList);
     }
 
     @Override
     public String toString() {
         return "UserDetails{" +
-                "username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
-                ", userId=" + userId +
+                ", userId=" + usersEntity +
                 '}';
     }
 }

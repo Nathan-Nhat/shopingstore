@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class AuthController {
 
@@ -43,8 +46,11 @@ public class AuthController {
             throw new UsernameNotFoundException(ErrorType.USER_NOTFOUND.toString());
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(usersEntity.getUsername());
+        final List<String> roles = userDetails.getAuthorities().stream().map(role -> role.getAuthority()).collect(Collectors.toList());
+        final String role = roles.get(0);
         final IJwtUtils  jwtUtils = new JwtUtilsImplement();
-        final JwtObject jwtObject = new JwtObject(jwtUtils.generateJwtToken(userDetails));
+        final JwtObject jwtObject = new JwtObject(jwtUtils.generateJwtToken(userDetails), userDetails.getUsername()
+                                            , role);
         return ResponseEntity.ok(jwtObject);
     }
- }
+  }

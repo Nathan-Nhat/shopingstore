@@ -23,20 +23,17 @@ public class UsersEntity implements Serializable {
     private String password;
     @Column(name = "roles")
     private String roles;
-    @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UsersDetails userDetails;
     @Column(name = "status")
     private Integer status;
     public UsersEntity(){};
-    @OneToMany(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<CustomerOrder> customerOrderList;
     public UsersEntity(String username, String password, String roles, Integer status, UsersDetails userDetails,
                        List<CustomerOrder> customerOrderList) {
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.status = status;
-        this.customerOrderList = customerOrderList;
     }
 
     public Integer getId() {
@@ -59,9 +56,6 @@ public class UsersEntity implements Serializable {
         return status;
     }
 
-    public List<CustomerOrder> getCustomerOrderList() {
-        return customerOrderList;
-    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -91,9 +85,6 @@ public class UsersEntity implements Serializable {
         this.status = status;
     }
 
-    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
-        this.customerOrderList = customerOrderList;
-    }
 
     @Override
     public String toString() {
