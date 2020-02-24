@@ -1,5 +1,7 @@
 package com.ttnhat.shop.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,7 +16,7 @@ public class OrderedProduct implements Serializable {
     private CustomerOrder customerOrder;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 

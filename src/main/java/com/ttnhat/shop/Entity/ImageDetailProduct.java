@@ -1,6 +1,7 @@
 package com.ttnhat.shop.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,7 +19,6 @@ public class ImageDetailProduct {
     private String imageDetails;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 

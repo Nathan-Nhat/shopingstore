@@ -11,9 +11,7 @@ import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface IUsersRepository extends JpaRepository<UsersEntity, Integer> {
-    @Query("select u.id, u.username, u.roles, u.password, u.status from UsersEntity u")
+public interface IUsersRepository {
     Page<UsersEntity> findAllUser(Pageable pageable);
     Optional<UsersEntity> findByUsername(String username);
     UsersEntity save(UsersEntity usersEntity);

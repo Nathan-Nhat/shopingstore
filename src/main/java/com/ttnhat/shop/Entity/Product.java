@@ -1,5 +1,8 @@
 package com.ttnhat.shop.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -30,11 +33,11 @@ public class Product {
 
     @Column(name = "date_create")
     private Date dateCreate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderedProduct> orderedProductList;
 
     public Product(String name, String price, String description, Date lastUpdate,

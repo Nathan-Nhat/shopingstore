@@ -18,7 +18,8 @@ public class AdminUsersService implements IAdminUsersService {
     @Override
     public Page<UsersEntity> getAllUserByPage(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        return usersRepository.findAll(pageable);
+        Page<UsersEntity> pageUsers= usersRepository.findAllUser(pageable);
+        return pageUsers;
     }
 
     @Override

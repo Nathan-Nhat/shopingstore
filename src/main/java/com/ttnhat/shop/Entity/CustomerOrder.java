@@ -1,5 +1,6 @@
 package com.ttnhat.shop.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
