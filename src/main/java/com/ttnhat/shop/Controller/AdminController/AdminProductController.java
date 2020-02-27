@@ -21,9 +21,9 @@ public class AdminProductController {
     private IAdminProductService adminProductService;
 
     @PostMapping(value = "/products")
-    public ResponseEntity<Product> addSingleProducts(@RequestPart(name = "files", required = false)MultipartFile file,
+    public ResponseEntity<Product> addSingleProducts(@RequestPart(name = "files", required = false) MultipartFile file,
                                                      @RequestPart(name = "properties") Product product, @RequestPart(name = "detailFiles", required = false) MultipartFile[] multipartFiles){
-        System.out.println(multipartFiles.length);
+        System.out.println(product.getCategory());
 
         return ResponseEntity.ok(adminProductService.addSingleProduct(file, product, multipartFiles));
     }
@@ -37,7 +37,7 @@ public class AdminProductController {
     public ResponseEntity<Page<Product>> getAllUserByPage(@RequestParam(name = "page")Integer pageNum,
                                                               @RequestParam(name = "size") Integer pageSize)
     {
-        Page<Product> usersEntityList = adminProductService.getAllUserByPage(pageNum, pageSize);
+        Page<Product> usersEntityList = adminProductService.getAllUProductByPage(pageNum, pageSize);
         return ResponseEntity.ok(usersEntityList);
     }
 }

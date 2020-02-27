@@ -29,15 +29,6 @@ public class AdminUsersService implements IAdminUsersService {
 
     @Override
     public UsersEntity updateUser(UsersEntity user) {
-        Optional<UsersEntity> optionalUsersEntity = usersRepository.findByUsername(user.getUsername());
-        UsersEntity usersEntity = optionalUsersEntity.orElseThrow(()->new UsernameNotFoundException("Username not found"));
-            if (usersEntity.getRoles() != "ADMIN") {
-                usersEntity.setStatus(user.getStatus());
-                usersRepository.save(usersEntity);
-            }
-            else {
-                throw new UsernameNotFoundException("Error Index Roles");
-            }
-        return usersEntity;
+        return  usersRepository.save(user);
     }
 }

@@ -24,12 +24,15 @@ public class UsersDetails implements Serializable {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @JsonIgnore
     @Id
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UsersEntity usersEntity;
+    private Integer id;
+
     @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private UsersEntity usersEntity;
+
     @OneToMany(mappedBy = "usersDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrderList;
     public UsersDetails() {

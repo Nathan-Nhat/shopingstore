@@ -38,7 +38,7 @@ public class FileStorageService implements IFileStorageService{
         }
     }
     @Override
-    public String storeFile(MultipartFile multipartFile, Product product, String name) {
+    public String storeFile(MultipartFile multipartFile, Product product, String uuid, String name) {
         String idPathStr = fileStorageProperties.getLocation() + "/" + product.getCategory().getId();
         Path idPath = Paths.get(idPathStr);
         String filename = null;
@@ -50,7 +50,7 @@ public class FileStorageService implements IFileStorageService{
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
-        String productPathStr = idPathStr  + "/"+ product.getId();
+        String productPathStr = idPathStr  + "/"+ uuid;
         Path idProductPath = Paths.get(productPathStr);
         try {
             if (!Files.isDirectory(idProductPath))
@@ -63,7 +63,7 @@ public class FileStorageService implements IFileStorageService{
         filename = name + "." + multipartFile.getOriginalFilename()
                     .substring(
                             multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
-        String filePath = this.baseUrl + product.getCategory().getId().toString() + "/" + product.getId() + "/" + filename;
+        String filePath = this.baseUrl + product.getCategory().getId().toString() + "/" + uuid + "/" + filename;
         try {
             InputStream inputStream = multipartFile.getInputStream();
             Files.copy(inputStream, idProductPath.resolve(filename), StandardCopyOption.REPLACE_EXISTING);

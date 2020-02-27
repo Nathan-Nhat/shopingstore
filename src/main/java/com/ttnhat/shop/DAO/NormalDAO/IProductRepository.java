@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface IProductRepository extends JpaRepository<Product, String> {
-    Page<Product> findAll(Pageable pageable);
+public interface IProductRepository{
+    Page<Product> findAllProduct(Pageable pageable);
+    Optional<Product> findById(String id);
+    Optional<Product> save(Product product);
+    Product editProduct(Product product);
 }

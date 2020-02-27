@@ -1,5 +1,6 @@
 package com.ttnhat.shop.Sercurity.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.UsersDetails;
 
@@ -23,8 +24,11 @@ public class UsersEntity implements Serializable {
     private String password;
     @Column(name = "roles")
     private String roles;
-    @OneToOne(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @OneToOne(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private UsersDetails userDetails;
+
     @Column(name = "status")
     private Integer status;
     public UsersEntity(){};

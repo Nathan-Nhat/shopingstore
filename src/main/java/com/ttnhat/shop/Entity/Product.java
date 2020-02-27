@@ -28,15 +28,18 @@ public class Product {
     @Column(name = "url_image_main")
     private String imageMain;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ImageDetailProduct> imageDetailProduct;
 
     @Column(name = "date_create")
     private Date dateCreate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderedProduct> orderedProductList;
 
@@ -153,10 +156,11 @@ public class Product {
     public void setDateCreate(Date dateCreate) {
         this.dateCreate = dateCreate;
     }
+
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", price='" + price + '\'' +
                 ", description='" + description + '\'' +
@@ -164,6 +168,8 @@ public class Product {
                 ", numOrdered=" + numOrdered +
                 ", numClick=" + numClick +
                 ", imageMain='" + imageMain + '\'' +
+                ", imageDetailProduct=" + imageDetailProduct +
+                ", dateCreate=" + dateCreate +
                 ", category=" + category +
                 ", orderedProductList=" + orderedProductList +
                 '}';
