@@ -12,5 +12,5 @@ public interface IAdminProductService {
     List<Category> getAllCategory();
     Page<Product> getAllUProductByPage(Integer page, Integer size);
     Product editProduct(MultipartFile file, Product product, MultipartFile[] multipartFiles);
-
+    Product findProductById(String id);
 }

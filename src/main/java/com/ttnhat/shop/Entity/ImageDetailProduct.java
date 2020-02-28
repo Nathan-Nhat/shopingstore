@@ -19,12 +19,16 @@ public class ImageDetailProduct {
     private String imageDetails;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
+    @Column(name = "type")
+    private Integer type;
     public ImageDetailProduct() {};
-    public ImageDetailProduct(String imageDetails) {
+    public ImageDetailProduct(String imageDetails, Integer type) {
         this.imageDetails = imageDetails;
+        this.type = type;
     }
 
     public Integer getId() {
@@ -49,5 +53,13 @@ public class ImageDetailProduct {
 
     public void setImageDetails(String imageDetails) {
         this.imageDetails = imageDetails;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

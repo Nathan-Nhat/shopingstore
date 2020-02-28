@@ -1,6 +1,7 @@
 package com.ttnhat.shop.DAO.NormalDAO;
 
 import com.ttnhat.shop.Entity.Category;
+import com.ttnhat.shop.Entity.ImageDetailProduct;
 import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,8 @@ public class ProductRepository implements IProductRepository {
         try{
             entityManager.getTransaction().begin();
             Product product1 = entityManager.find(Product.class, id);
+            System.out.println(product1.getCategory());
+            System.out.println(product1.getImageDetailProduct());
             product = Optional.ofNullable(product1);
             entityManager.getTransaction().commit();
             entityManager.close();
@@ -92,7 +95,18 @@ public class ProductRepository implements IProductRepository {
             tempProduct.setPrice(product.getPrice());
             tempProduct.setLastUpdate(tempProduct.getLastUpdate());
             tempProduct.setImageMain(product.getImageMain());
-            tempProduct.setImageDetailProduct(product.getImageDetailProduct());
+            entityManager.flush();
+            System.out.println(product.getImageDetailProduct());
+//            for (ImageDetailProduct image : product.getImageDetailProduct())
+//            {
+//                if (image != null) {
+//                    System.out.println(image);
+//                    String sql = "update ImageDetailProduct u set u.imageDetails = :image_detail";
+//                    entityManager.createQuery(sql)
+//                            .setParameter("image_detail", image.getImageDetails())
+//                            .executeUpdate();
+//                }
+//            }
             entityManager.getTransaction().commit();
             entityManager.close();
             return product;

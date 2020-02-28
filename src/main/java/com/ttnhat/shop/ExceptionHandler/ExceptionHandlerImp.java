@@ -1,5 +1,6 @@
 package com.ttnhat.shop.ExceptionHandler;
 
+import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.apache.tomcat.util.ExceptionUtils;
@@ -69,6 +70,21 @@ public class ExceptionHandlerImp extends ResponseEntityExceptionHandler {
                 exceptionObject,
                 new HttpHeaders(),
                 HttpStatus.FORBIDDEN
+        );
+    }
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<ExceptionMessageObject> handleSQLException(Exception ex, HttpServletRequest request){
+        String path = request.getServletPath();
+        Date date = new Date();
+        ExceptionMessageObject exceptionObject = new ExceptionMessageObject(
+                date, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                ErrorType.SQL_ERROR.toString(), ex.getMessage(), path, new DebugLog(ex).getLog()
+        );
+
+        return new ResponseEntity<ExceptionMessageObject>(
+                exceptionObject,
+                new HttpHeaders(),
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 }

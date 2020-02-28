@@ -5,4 +5,5 @@ public enum ErrorType {
     INVALID_JWT_TOKEN,
     EXPIRED_JWT_TOKEN,
     USER_DISABLE,
+    SQL_ERROR,
 }

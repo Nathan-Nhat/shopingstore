@@ -28,6 +28,14 @@ public class AdminProductController {
         return ResponseEntity.ok(adminProductService.addSingleProduct(file, product, multipartFiles));
     }
 
+    @PutMapping(value = "/products")
+    public ResponseEntity<Product> editSingleProducts(@RequestPart(name = "files", required = false) MultipartFile file,
+                                                     @RequestPart(name = "properties") Product product, @RequestPart(name = "detailFiles", required = false) MultipartFile[] multipartFiles){
+        System.out.println(product.getCategory());
+
+        return ResponseEntity.ok(adminProductService.editProduct(file, product, multipartFiles));
+    }
+
     @GetMapping(value = "/category")
     public ResponseEntity<List<Category>> getAllCategory(){
         return ResponseEntity.ok(adminProductService.getAllCategory());
@@ -40,4 +48,11 @@ public class AdminProductController {
         Page<Product> usersEntityList = adminProductService.getAllUProductByPage(pageNum, pageSize);
         return ResponseEntity.ok(usersEntityList);
     }
+
+    @GetMapping(value = "/products/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable(name = "id") String id){
+        return ResponseEntity.ok(adminProductService.findProductById(id));
+    }
+
+
 }

@@ -28,7 +28,7 @@ public class Product {
     @Column(name = "url_image_main")
     private String imageMain;
 
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ImageDetailProduct> imageDetailProduct;
 
@@ -36,6 +36,7 @@ public class Product {
     private Date dateCreate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 

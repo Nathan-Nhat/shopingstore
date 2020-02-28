@@ -48,7 +48,7 @@ public class AdminProductService implements IAdminProductService {
             List<ImageDetailProduct> imageDetailProducts = new ArrayList<>();
                 for (MultipartFile detailFile : multipartFiles) {
                     String filepathDetail = fileStorageService.storeFile(detailFile, product, uniqueID, "detail-" + i);
-                    ImageDetailProduct imageDetailProduct = new ImageDetailProduct(filepathDetail);
+                    ImageDetailProduct imageDetailProduct = new ImageDetailProduct(filepathDetail, i);
                     imageDetailProduct.setProduct(productTemp);
                     imageDetailProducts.add(imageDetailProduct);
                     i++;
@@ -85,15 +85,24 @@ public class AdminProductService implements IAdminProductService {
         int i = 0;
         if(multipartFiles != null) {
             List<ImageDetailProduct> imageDetailProducts = new ArrayList<>();
+            String filepathDetail = null;
+            ImageDetailProduct imageDetailProduct = null;
             for (MultipartFile detailFile : multipartFiles) {
-                String filepathDetail = fileStorageService.storeFile(detailFile, product, product.getId(), "detail-" + i);
-                ImageDetailProduct imageDetailProduct = new ImageDetailProduct(filepathDetail);
-                imageDetailProduct.setProduct(tempProduct);
+                if(detailFile != null) {
+                    filepathDetail = fileStorageService.storeFile(detailFile, product, product.getId(), "detail-" + i);
+                    imageDetailProduct = new ImageDetailProduct(filepathDetail, i);
+                    imageDetailProduct.setProduct(tempProduct);
+                }
                 imageDetailProducts.add(imageDetailProduct);
                 i++;
             }
             tempProduct.setImageDetailProduct(imageDetailProducts);
         }
         return productRepository.editProduct(product);
+    }
+
+    @Override
+    public Product findProductById(String id) {
+        return productRepository.findById(id).orElseThrow(()->new RuntimeException("Cannot find Product"));
     }
 }
