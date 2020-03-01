@@ -11,55 +11,105 @@ import java.util.Objects;
 @Table(name = "image_details")
 public class ImageDetailProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    private String id;
 
-    @Column(name = "image_detail")
-    private String imageDetails;
+    @Column(name = "image_detail_1")
+    private String imageDetails1;
 
-    @ManyToOne
+    @Column(name = "image_detail_2")
+    private String imageDetails2;
+
+    @Column(name = "image_detail_3")
+    private String imageDetails3;
+
+    @Column(name = "image_detail_4")
+    private String imageDetails4;
+
+    @Column(name = "image_detail_5")
+    private String imageDetails5;
+
+    @Column(name = "image_detail_6")
+    private String imageDetails6;
     @JsonIgnore
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
     private Product product;
 
-    @Column(name = "type")
-    private Integer type;
     public ImageDetailProduct() {};
-    public ImageDetailProduct(String imageDetails, Integer type) {
-        this.imageDetails = imageDetails;
-        this.type = type;
+
+    public ImageDetailProduct(String id, String imageDetails1, String imageDetails2, String imageDetails3, String imageDetails4, String imageDetails5, String imageDetails6, Product product) {
+        this.id = id;
+        this.imageDetails1 = imageDetails1;
+        this.imageDetails2 = imageDetails2;
+        this.imageDetails3 = imageDetails3;
+        this.imageDetails4 = imageDetails4;
+        this.imageDetails5 = imageDetails5;
+        this.imageDetails6 = imageDetails6;
+        this.product = product;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public String getImageDetails() {
-        return imageDetails;
+    public String getImageDetails1() {
+        return imageDetails1;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getImageDetails2() {
+        return imageDetails2;
+    }
+
+    public String getImageDetails3() {
+        return imageDetails3;
+    }
+
+    public String getImageDetails4() {
+        return imageDetails4;
+    }
+
+    public String getImageDetails5() {
+        return imageDetails5;
+    }
+
+    public String getImageDetails6() {
+        return imageDetails6;
     }
 
     public Product getProduct() {
         return product;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setImageDetails1(String imageDetails1) {
+        this.imageDetails1 = imageDetails1;
+    }
+
+    public void setImageDetails2(String imageDetails2) {
+        this.imageDetails2 = imageDetails2;
+    }
+
+    public void setImageDetails3(String imageDetails3) {
+        this.imageDetails3 = imageDetails3;
+    }
+
+    public void setImageDetails4(String imageDetails4) {
+        this.imageDetails4 = imageDetails4;
+    }
+
+    public void setImageDetails5(String imageDetails5) {
+        this.imageDetails5 = imageDetails5;
+    }
+
+    public void setImageDetails6(String imageDetails6) {
+        this.imageDetails6 = imageDetails6;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public void setImageDetails(String imageDetails) {
-        this.imageDetails = imageDetails;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 }

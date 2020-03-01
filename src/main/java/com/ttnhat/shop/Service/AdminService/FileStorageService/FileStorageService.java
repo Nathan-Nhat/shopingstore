@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileStorageService implements IFileStorageService{
@@ -38,10 +39,11 @@ public class FileStorageService implements IFileStorageService{
         }
     }
     @Override
-    public String storeFile(MultipartFile multipartFile, Product product, String uuid, String name) {
+    public String storeFile(MultipartFile multipartFile, Product product, String uuid) {
         String idPathStr = fileStorageProperties.getLocation() + "/" + product.getCategory().getId();
         Path idPath = Paths.get(idPathStr);
         String filename = null;
+        String name = UUID.randomUUID().toString();
         try {
             if (!Files.isDirectory(idPath))
             {

@@ -1,15 +1,14 @@
 package com.ttnhat.shop.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product{
     @Id
     @Column(name = "id")
     private String id;
@@ -21,16 +20,12 @@ public class Product {
     private String description;
     @Column(name = "last_update")
     private Date lastUpdate;
-    @Column(name = "num_ordered")
-    private Integer numOrdered;
-    @Column(name = "num_click")
-    private Integer numClick;
     @Column(name = "url_image_main")
     private String imageMain;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ImageDetailProduct> imageDetailProduct;
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    private ImageDetailProduct imageDetailProduct;
 
     @Column(name = "date_create")
     private Date dateCreate;
@@ -44,16 +39,17 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderedProduct> orderedProductList;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductDate> productDates = new ArrayList<>();
+
     public Product(String name, String price, String description, Date lastUpdate,
-                   Integer numOrdered, Integer numClick, String hot, Category category,
-                   List<OrderedProduct> orderedProductList, String imageMain, List<ImageDetailProduct> imageDetailProduct,
+                   Category category,
+                   List<OrderedProduct> orderedProductList, String imageMain, ImageDetailProduct imageDetailProduct,
                    Date dateCreate) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.lastUpdate = lastUpdate;
-        this.numOrdered = numOrdered;
-        this.numClick = numClick;
         this.imageMain = imageMain;
         this.category = category;
         this.orderedProductList = orderedProductList;
@@ -82,33 +78,19 @@ public class Product {
         return lastUpdate;
     }
 
-    public Integer getNumOrdered() {
-        return numOrdered;
-    }
-
-    public Integer getNumClick() {
-        return numClick;
-    }
-
     public String getImageMain() {
         return imageMain;
     }
 
-    public List<ImageDetailProduct> getImageDetailProduct() {
+    public ImageDetailProduct getImageDetailProduct() {
         return imageDetailProduct;
     }
 
-    public Date getDateCreate() {
-        return dateCreate;
-    }
 
     public Category getCategory() {
         return category;
     }
 
-    public List<OrderedProduct> getOrderedProductList() {
-        return orderedProductList;
-    }
 
     public void setId(String id) {
         this.id = id;
@@ -130,13 +112,6 @@ public class Product {
         this.lastUpdate = lastUpdate;
     }
 
-    public void setNumOrdered(Integer numOrdered) {
-        this.numOrdered = numOrdered;
-    }
-
-    public void setNumClick(Integer numClick) {
-        this.numClick = numClick;
-    }
 
     public void setCategory(Category category) {
         this.category = category;
@@ -146,7 +121,7 @@ public class Product {
         this.orderedProductList = orderedProductList;
     }
 
-    public void setImageDetailProduct(List<ImageDetailProduct> imageDetailProduct) {
+    public void setImageDetailProduct(ImageDetailProduct imageDetailProduct) {
         this.imageDetailProduct = imageDetailProduct;
     }
 
@@ -158,6 +133,14 @@ public class Product {
         this.dateCreate = dateCreate;
     }
 
+    public List<ProductDate> getProductDates() {
+        return productDates;
+    }
+
+    public void setProductDates(List<ProductDate> productDates) {
+        this.productDates = productDates;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -166,8 +149,6 @@ public class Product {
                 ", price='" + price + '\'' +
                 ", description='" + description + '\'' +
                 ", lastUpdate=" + lastUpdate +
-                ", numOrdered=" + numOrdered +
-                ", numClick=" + numClick +
                 ", imageMain='" + imageMain + '\'' +
                 ", imageDetailProduct=" + imageDetailProduct +
                 ", dateCreate=" + dateCreate +
@@ -175,4 +156,5 @@ public class Product {
                 ", orderedProductList=" + orderedProductList +
                 '}';
     }
+
 }

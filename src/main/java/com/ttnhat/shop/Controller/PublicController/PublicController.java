@@ -31,4 +31,10 @@ public class PublicController {
     public ResponseEntity<Product> getProductById(@PathVariable(name = "id") String id){
         return ResponseEntity.ok(publicService.findProductById(id));
     }
+    @GetMapping(value = "/products/search")
+    public ResponseEntity<Page<Product>> getProductBySearch(@RequestParam(name = "query", required = false)String name, @RequestParam(name = "page")
+                                                            Integer page, @RequestParam(name = "size") Integer size){
+        System.out.println(page);
+        return ResponseEntity.ok(publicService.getProductBySearchName(name, page, size));
+    }
 }

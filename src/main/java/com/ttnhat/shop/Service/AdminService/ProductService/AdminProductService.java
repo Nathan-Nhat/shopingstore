@@ -5,6 +5,8 @@ import com.ttnhat.shop.DAO.NormalDAO.IProductRepository;
 import com.ttnhat.shop.Entity.Category;
 import com.ttnhat.shop.Entity.ImageDetailProduct;
 import com.ttnhat.shop.Entity.Product;
+import com.ttnhat.shop.Entity.ProductDate;
+import com.ttnhat.shop.Object.UpdateImageDetail;
 import com.ttnhat.shop.Service.AdminService.FileStorageService.FileStorageService;
 import com.ttnhat.shop.Service.AdminService.FileStorageService.IFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,8 @@ public class AdminProductService implements IAdminProductService {
     @Autowired
     private ICategoryRepository categoryRepository;
     @Override
-    public Product addSingleProduct(MultipartFile file, Product product, MultipartFile[] multipartFiles) {
+    public Product addSingleProduct(MultipartFile file, Product product, MultipartFile multipartFile1, MultipartFile multipartFile2, MultipartFile multipartFile3,
+                                    MultipartFile multipartFile4, MultipartFile multipartFile5, MultipartFile multipartFile6) {
         Date dateNow = new Date();
         Product productTemp = new Product();
         String uniqueID = UUID.randomUUID().toString();
@@ -35,26 +38,40 @@ public class AdminProductService implements IAdminProductService {
         productTemp.setPrice(product.getPrice());
         productTemp.setDescription(product.getDescription());
         if(file != null) {
-            String filepath = fileStorageService.storeFile(file, product, uniqueID, "content");
+            String filepath = fileStorageService.storeFile(file, product, uniqueID);
             productTemp.setImageMain(filepath);
         }
         productTemp.setLastUpdate(dateNow);
         productTemp.setDateCreate(dateNow);
-        productTemp.setNumClick(0);
-        productTemp.setNumOrdered(0);
         productTemp.setCategory(product.getCategory());
         int i = 0;
-        if(multipartFiles != null) {
-            List<ImageDetailProduct> imageDetailProducts = new ArrayList<>();
-                for (MultipartFile detailFile : multipartFiles) {
-                    String filepathDetail = fileStorageService.storeFile(detailFile, product, uniqueID, "detail-" + i);
-                    ImageDetailProduct imageDetailProduct = new ImageDetailProduct(filepathDetail, i);
-                    imageDetailProduct.setProduct(productTemp);
-                    imageDetailProducts.add(imageDetailProduct);
-                    i++;
-                }
-                productTemp.setImageDetailProduct(imageDetailProducts);
+            ImageDetailProduct imageDetailProduct = new ImageDetailProduct();
+            if(multipartFile1 != null) {
+                String filepathDetail1 = fileStorageService.storeFile(multipartFile1, product, uniqueID);
+                imageDetailProduct.setImageDetails1(filepathDetail1);
             }
+            if(multipartFile2 != null) {
+                String filepathDetail2 = fileStorageService.storeFile(multipartFile2, product, uniqueID);
+                imageDetailProduct.setImageDetails2(filepathDetail2);
+            }
+            if(multipartFile3 != null) {
+                String filepathDetail3 = fileStorageService.storeFile(multipartFile3, product, uniqueID);
+                imageDetailProduct.setImageDetails3(filepathDetail3);
+            }
+            if(multipartFile4 != null) {
+                String filepathDetail4 = fileStorageService.storeFile(multipartFile4, product, uniqueID);
+                imageDetailProduct.setImageDetails4(filepathDetail4);
+            }
+            if(multipartFile5 != null) {
+                String filepathDetail5 = fileStorageService.storeFile(multipartFile5, product, uniqueID);
+                imageDetailProduct.setImageDetails5(filepathDetail5);
+            }
+            if(multipartFile6 != null) {
+                String filepathDetail6 = fileStorageService.storeFile(multipartFile6, product, uniqueID);
+                imageDetailProduct.setImageDetails6(filepathDetail6);
+            }
+            imageDetailProduct.setProduct(productTemp);
+            productTemp.setImageDetailProduct(imageDetailProduct);
         return productRepository.save(productTemp).orElseThrow(()->new RuntimeException("Cannot save product"));
     }
 
@@ -71,38 +88,91 @@ public class AdminProductService implements IAdminProductService {
     }
 
     @Override
-    public Product editProduct(MultipartFile file, Product product, MultipartFile[] multipartFiles) {
-        Product tempProduct = new Product();
-        Date date = new Date();
-        tempProduct.setName(product.getName());
-        tempProduct.setPrice(product.getPrice());
-        tempProduct.setDescription(product.getDescription());
-        tempProduct.setLastUpdate(date);
+    public Product editProduct(MultipartFile file, Product product, MultipartFile multipartFile1, MultipartFile multipartFile2, MultipartFile multipartFile3,
+                               MultipartFile multipartFile4, MultipartFile multipartFile5, MultipartFile multipartFile6) {
+        Date dateNow = new Date();
+        Product productTemp = new Product();
+        productTemp.setId(product.getId());
+        productTemp.setName(product.getName());
+        productTemp.setPrice(product.getPrice());
+        productTemp.setDescription(product.getDescription());
         if(file != null) {
-            String filepath = fileStorageService.storeFile(file, product, product.getId(), "content");
-            tempProduct.setImageMain(filepath);
+            String filepath = fileStorageService.storeFile(file, product, product.getId());
+            productTemp.setImageMain(filepath);
         }
+        productTemp.setCategory(product.getCategory());
         int i = 0;
-        if(multipartFiles != null) {
-            List<ImageDetailProduct> imageDetailProducts = new ArrayList<>();
-            String filepathDetail = null;
-            ImageDetailProduct imageDetailProduct = null;
-            for (MultipartFile detailFile : multipartFiles) {
-                if(detailFile != null) {
-                    filepathDetail = fileStorageService.storeFile(detailFile, product, product.getId(), "detail-" + i);
-                    imageDetailProduct = new ImageDetailProduct(filepathDetail, i);
-                    imageDetailProduct.setProduct(tempProduct);
-                }
-                imageDetailProducts.add(imageDetailProduct);
-                i++;
-            }
-            tempProduct.setImageDetailProduct(imageDetailProducts);
+        ImageDetailProduct imageDetailProduct = new ImageDetailProduct();
+        if(multipartFile1 != null) {
+            String filepathDetail1 = fileStorageService.storeFile(multipartFile1, product, product.getId());
+            imageDetailProduct.setImageDetails1(filepathDetail1);
         }
-        return productRepository.editProduct(product);
+        if(multipartFile2 != null) {
+            String filepathDetail2 = fileStorageService.storeFile(multipartFile2, product, product.getId());
+            imageDetailProduct.setImageDetails2(filepathDetail2);
+        }
+        if(multipartFile3 != null) {
+            String filepathDetail3 = fileStorageService.storeFile(multipartFile3, product, product.getId());
+            imageDetailProduct.setImageDetails3(filepathDetail3);
+        }
+        if(multipartFile4 != null) {
+            String filepathDetail4 = fileStorageService.storeFile(multipartFile4, product, product.getId());
+            imageDetailProduct.setImageDetails4(filepathDetail4);
+        }
+        if(multipartFile5 != null) {
+            String filepathDetail5 = fileStorageService.storeFile(multipartFile5, product, product.getId());
+            imageDetailProduct.setImageDetails5(filepathDetail5);
+        }
+        if(multipartFile6 != null) {
+            String filepathDetail6 = fileStorageService.storeFile(multipartFile6, product, product.getId());
+            imageDetailProduct.setImageDetails6(filepathDetail6);
+        }
+        imageDetailProduct.setProduct(productTemp);
+        productTemp.setImageDetailProduct(imageDetailProduct);
+        return productRepository.editProduct(productTemp);
     }
 
     @Override
     public Product findProductById(String id) {
         return productRepository.findById(id).orElseThrow(()->new RuntimeException("Cannot find Product"));
+    }
+
+    @Override
+    public void updateImage(UpdateImageDetail updateImageDetail) {
+        productRepository.updateImage(updateImageDetail);
+    }
+
+    @Override
+    public void deleteProductById(String id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public void addTestProduct(Product product) {
+        Date dateNow = new Date();
+        Product productTemp = new Product();
+        String uniqueID = UUID.randomUUID().toString();
+        productTemp.setName(product.getName());
+        productTemp.setPrice(product.getPrice());
+        productTemp.setId(uniqueID);
+        productTemp.setLastUpdate(dateNow);
+        productTemp.setDateCreate(dateNow);
+        productTemp.setImageMain(product.getImageMain());
+        ImageDetailProduct imageDetailProduct = new ImageDetailProduct();
+        imageDetailProduct.setImageDetails1(product.getImageDetailProduct().getImageDetails1());
+        imageDetailProduct.setImageDetails2(product.getImageDetailProduct().getImageDetails2());
+        imageDetailProduct.setImageDetails3(product.getImageDetailProduct().getImageDetails3());
+        imageDetailProduct.setImageDetails4(product.getImageDetailProduct().getImageDetails4());
+        imageDetailProduct.setImageDetails5(product.getImageDetailProduct().getImageDetails5());
+        imageDetailProduct.setImageDetails6(product.getImageDetailProduct().getImageDetails6());
+        imageDetailProduct.setProduct(productTemp);
+        productTemp.setImageDetailProduct(imageDetailProduct);
+        productTemp.setCategory(product.getCategory());
+        productRepository.saveTest(productTemp);
+    }
+
+    @Override
+    public List<ProductDate> getDataByDate(Integer date, String productId) {
+        return productRepository.getDataByDate(date, productId);
     }
 }

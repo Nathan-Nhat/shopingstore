@@ -42,4 +42,9 @@ public class AdminUsersController {
     public ResponseEntity<UsersEntity> upDateUser(@RequestBody UsersEntity usersEntity){
         return ResponseEntity.ok(adminService.updateUser(usersEntity));
     }
+
+    @GetMapping("/products/addAll")
+    public void addAllProduct(){
+
+    }
 }

@@ -23,4 +23,14 @@ public class PublicService implements IPublicService{
     public Product findProductById(String id) {
         return productRepository.findById(id).orElseThrow(()->new RuntimeException("Cannot find Product"));
     }
+
+    @Override
+    public Page<Product> getProductBySearchName(String name, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (name != null) {
+            return productRepository.getProductByName(pageable, name);
+        } else {
+            return productRepository.findAllProduct(pageable);
+        }
+    }
 }
