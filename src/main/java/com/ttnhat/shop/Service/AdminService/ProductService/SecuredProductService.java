@@ -7,20 +7,18 @@ import com.ttnhat.shop.Entity.ImageDetailProduct;
 import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.Entity.ProductDate;
 import com.ttnhat.shop.Object.UpdateImageDetail;
-import com.ttnhat.shop.Service.AdminService.FileStorageService.FileStorageService;
 import com.ttnhat.shop.Service.AdminService.FileStorageService.IFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
 @Service
-public class AdminProductService implements IAdminProductService {
+public class SecuredProductService implements ISecuredProductService {
     @Autowired
     private IProductRepository productRepository;
     @Autowired

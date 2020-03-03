@@ -9,10 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class AdminUsersService implements IAdminUsersService {
+public class SecuredUsersService implements ISecuredUsersService {
     @Autowired
     private IUsersRepository usersRepository;
     @Override

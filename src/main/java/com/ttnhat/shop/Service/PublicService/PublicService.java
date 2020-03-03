@@ -25,10 +25,10 @@ public class PublicService implements IPublicService{
     }
 
     @Override
-    public Page<Product> getProductBySearchName(String name, Integer page, Integer size) {
+    public Page<Product> getProductBySearchName(String name, Integer page, Integer size, String category) {
         Pageable pageable = PageRequest.of(page, size);
-        if (name != null) {
-            return productRepository.getProductByName(pageable, name);
+        if (!category.equals("all")){
+            return productRepository.getProductByName(pageable, name, category);
         } else {
             return productRepository.findAllProduct(pageable);
         }

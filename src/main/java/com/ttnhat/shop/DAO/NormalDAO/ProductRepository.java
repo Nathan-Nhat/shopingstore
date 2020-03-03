@@ -32,16 +32,17 @@ public class ProductRepository implements IProductRepository {
         try {
             entityManager.getTransaction().begin();
             String sql = "select u from Product u";
-            String sqlCount = "select count(u) from Product u";
             List<Product> productsList = entityManager.createQuery(sql, Product.class)
                                             .getResultList();
-            Long total = entityManager.createQuery(sqlCount, Long.class).getSingleResult();
-            System.out.println(pageable);
-            System.out.println(total);
-            products = new PageImpl<Product>(productsList, pageable, total);
+            Integer total = productsList.size();
+            int page = pageable.getPageNumber();
+            int size = pageable.getPageSize();
+            if (size > total) size = total;
+            List<Product> pagedListProduct = new ArrayList<>(productsList.subList(page * size, (page+1)*size ));
+            Page<Product> pageProduct = new PageImpl<Product>(pagedListProduct, pageable, total);
             entityManager.getTransaction().commit();
             entityManager.close();
-            return products;
+            return pageProduct;
         }
         catch (RuntimeException e){
             System.out.println(e.getMessage());
@@ -192,14 +193,15 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Page<Product> getProductByName(Pageable pageable, String name) {
+    public Page<Product> getProductByName(Pageable pageable, String name, String category) {
         EntityManager entityManager = getEntityManager();
         String stringSearch = "%"+name+"%";
         try{
             entityManager.getTransaction().begin();
-            String sql = "select u from Product u where u.name like :name";
+            String sql = "select u from Product u where u.name like :name and u.category.name = :category";
             List<Product> products = entityManager.createQuery(sql, Product.class)
                     .setParameter("name", stringSearch)
+                    .setParameter("category", category)
                     .getResultList();
             Integer total = products.size();
             int page = pageable.getPageNumber();

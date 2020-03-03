@@ -1,8 +1,9 @@
 package com.ttnhat.shop.Controller.PublicController;
 
-import com.ttnhat.shop.Controller.AdminController.AdminUsersController;
+import com.ttnhat.shop.Controller.AdminController.SecuredUsersController;
+import com.ttnhat.shop.Entity.Category;
 import com.ttnhat.shop.Entity.Product;
-import com.ttnhat.shop.Service.AdminService.UserService.IAdminUsersService;
+import com.ttnhat.shop.Service.AdminService.ProductService.ISecuredProductService;
 import com.ttnhat.shop.Service.PublicService.IPublicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/public")
@@ -18,7 +20,9 @@ import org.springframework.web.client.RestTemplate;
 public class PublicController {
     @Autowired
     private IPublicService publicService;
-    Logger logger = LoggerFactory.getLogger(AdminUsersController.class);
+    @Autowired
+    private ISecuredProductService securedProductService;
+    Logger logger = LoggerFactory.getLogger(SecuredUsersController.class);
     @GetMapping(value = "/all-products")
     public ResponseEntity<Page<Product>> getAllUserByPage(@RequestParam(name = "page")Integer pageNum,
                                                           @RequestParam(name = "size") Integer pageSize)
@@ -33,8 +37,12 @@ public class PublicController {
     }
     @GetMapping(value = "/products/search")
     public ResponseEntity<Page<Product>> getProductBySearch(@RequestParam(name = "query", required = false)String name, @RequestParam(name = "page")
-                                                            Integer page, @RequestParam(name = "size") Integer size){
+                                                            Integer page, @RequestParam(name = "size") Integer size, @RequestParam(name = "category") String category){
         System.out.println(page);
-        return ResponseEntity.ok(publicService.getProductBySearchName(name, page, size));
+        return ResponseEntity.ok(publicService.getProductBySearchName(name, page, size, category));
+    }
+    @GetMapping(value = "/category")
+    public ResponseEntity<List<Category>> getAllCategory(){
+        return ResponseEntity.ok(securedProductService.getAllCategory());
     }
 }

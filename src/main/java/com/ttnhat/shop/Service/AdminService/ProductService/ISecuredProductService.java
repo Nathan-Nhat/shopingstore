@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface IAdminProductService {
+public interface ISecuredProductService {
     Product addSingleProduct(MultipartFile file, Product product, MultipartFile multipartFile1, MultipartFile multipartFile2, MultipartFile multipartFile3,
     MultipartFile multipartFile4, MultipartFile multipartFile5, MultipartFile multipartFile6);
     List<Category> getAllCategory();

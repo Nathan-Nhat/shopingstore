@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,6 +21,10 @@ import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
@@ -43,8 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/public/**").permitAll()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/image/products/**").permitAll()
-                .antMatchers("/api/admin/*").hasAuthority("ADMIN")
-                .antMatchers("/api/customer/*").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .antMatchers("/api/secured/**").hasAnyAuthority("ADMIN, CUSTOMER")
                 .and()
                 .addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
