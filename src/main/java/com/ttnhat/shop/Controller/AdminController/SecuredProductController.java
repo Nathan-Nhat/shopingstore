@@ -65,6 +65,12 @@ public class SecuredProductController {
     }
 
     @IsAdmin
+    @GetMapping(value = "/products/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable(name = "id") String id){
+        return ResponseEntity.ok(securedProductService.findProductById(id));
+    }
+
+    @IsAdmin
     @PostMapping(value = "/products/test")
     public void addSingleProducts(@RequestBody Product product){
         System.out.println(product.getCategory());
