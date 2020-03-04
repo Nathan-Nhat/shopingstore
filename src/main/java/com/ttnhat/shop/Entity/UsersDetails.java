@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_details")
 public class UsersDetails implements Serializable {
-    private static final long serialVersionUID = 1L;
     @Column(name = "name")
     private String name;
     @Column(name = "email")
@@ -25,16 +24,12 @@ public class UsersDetails implements Serializable {
     private String avatarUrl;
 
     @Id
-    private Integer id;
-
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
-    @MapsId
     @JoinColumn(name = "user_id")
     private UsersEntity usersEntity;
 
-    @OneToMany(mappedBy = "usersDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<CustomerOrder> customerOrderList;
+
     public UsersDetails() {
     }
 
@@ -45,7 +40,6 @@ public class UsersDetails implements Serializable {
         this.address = address;
         this.avatarUrl = avatarUrl;
         this.usersEntity = usersEntity;
-        this.customerOrderList = customerOrderList;
     }
 
 
@@ -73,9 +67,6 @@ public class UsersDetails implements Serializable {
         return usersEntity;
     }
 
-    public List<CustomerOrder> getCustomerOrderList() {
-        return customerOrderList;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -101,28 +92,6 @@ public class UsersDetails implements Serializable {
         this.usersEntity = usersEntity;
     }
 
-    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
-        this.customerOrderList = customerOrderList;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UsersDetails that = (UsersDetails) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(phone, that.phone) &&
-                Objects.equals(address, that.address) &&
-                Objects.equals(avatarUrl, that.avatarUrl) &&
-                Objects.equals(usersEntity, that.usersEntity) &&
-                Objects.equals(customerOrderList, that.customerOrderList);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, email, phone, address, avatarUrl, usersEntity, customerOrderList);
-    }
 
     @Override
     public String toString() {
@@ -132,7 +101,6 @@ public class UsersDetails implements Serializable {
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
-                ", userId=" + usersEntity +
                 '}';
     }
 }

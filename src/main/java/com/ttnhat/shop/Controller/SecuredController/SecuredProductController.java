@@ -1,21 +1,24 @@
-package com.ttnhat.shop.Controller.AdminController;
+package com.ttnhat.shop.Controller.SecuredController;
 
 import com.ttnhat.shop.Annotation.IsAdmin;
-import com.ttnhat.shop.Entity.Category;
+import com.ttnhat.shop.Annotation.IsCustomer;
+import com.ttnhat.shop.Controller.ResponseObject.ResponseObject;
 import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.Entity.ProductDate;
 import com.ttnhat.shop.Object.UpdateImageDetail;
-import com.ttnhat.shop.Service.AdminService.ProductService.ISecuredProductService;
+import com.ttnhat.shop.Service.SecuredService.ProductService.ISecuredProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api/secured-product")
+@RequestMapping(value = "/api/secured")
 public class SecuredProductController {
     @Autowired
     private ISecuredProductService securedProductService;
@@ -65,8 +68,8 @@ public class SecuredProductController {
     }
 
     @IsAdmin
-    @GetMapping(value = "/products/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable(name = "id") String id){
+    @GetMapping(value = "/products}")
+    public ResponseEntity<Product> getProductById(@RequestParam(name = "id") String id){
         return ResponseEntity.ok(securedProductService.findProductById(id));
     }
 
@@ -81,7 +84,6 @@ public class SecuredProductController {
     @GetMapping(value = "/products")
     public ResponseEntity<List<ProductDate>> getDataByDate(@RequestParam(name = "numDateBefore") Integer numDate,
                                                     @RequestParam(name = "product_id") String productId){
-        System.out.println("1231231231`231231231231");
         return ResponseEntity.ok(securedProductService.getDataByDate(numDate, productId));
     }
 }

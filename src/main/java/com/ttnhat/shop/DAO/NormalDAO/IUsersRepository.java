@@ -15,4 +15,5 @@ public interface IUsersRepository {
     Page<UsersEntity> findAllUser(Pageable pageable);
     Optional<UsersEntity> findByUsername(String username);
     UsersEntity save(UsersEntity usersEntity);
+    UsersEntity signUp(UsersEntity usersEntity);
 }

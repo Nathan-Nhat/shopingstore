@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Service.AdminService.ProductService;
+package com.ttnhat.shop.Service.SecuredService.ProductService;
 
 import com.ttnhat.shop.DAO.NormalDAO.ICategoryRepository;
 import com.ttnhat.shop.DAO.NormalDAO.IProductRepository;
@@ -7,11 +7,8 @@ import com.ttnhat.shop.Entity.ImageDetailProduct;
 import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.Entity.ProductDate;
 import com.ttnhat.shop.Object.UpdateImageDetail;
-import com.ttnhat.shop.Service.AdminService.FileStorageService.IFileStorageService;
+import com.ttnhat.shop.Service.SecuredService.FileStorageService.IFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,13 +73,6 @@ public class SecuredProductService implements ISecuredProductService {
     @Override
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();
-    }
-
-    @Override
-    public Page<Product> getAllUProductByPage(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Product> listProduct = productRepository.findAllProduct(pageable);
-        return listProduct;
     }
 
     @Override

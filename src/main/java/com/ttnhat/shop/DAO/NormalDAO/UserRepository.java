@@ -1,5 +1,6 @@
 package com.ttnhat.shop.DAO.NormalDAO;
 
+import com.ttnhat.shop.Entity.UsersDetails;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,6 +92,34 @@ public class UserRepository implements IUsersRepository {
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
             throw new SQLException(e.getMessage());
+        }
+    }
+
+    @Override
+    public UsersEntity signUp(UsersEntity usersEntity) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            String sql = "select u from UsersEntity u where u.username = :username";
+            System.out.println(usersEntity.getUserDetails());
+            List<UsersEntity> tempUser = entityManager.createQuery(sql, UsersEntity.class)
+                    .setParameter("username" , usersEntity.getUsername())
+                    .getResultList();
+            if (!tempUser.isEmpty()){
+                throw new RuntimeException("User is existed. Please change fill again");
+            }
+            entityManager.flush();
+            UsersDetails usersDetails = usersEntity.getUserDetails();
+            usersDetails.setUsersEntity(usersEntity);
+            usersEntity.setUserDetails(usersDetails);
+            entityManager.persist(usersEntity);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            return usersEntity;
+        }
+        catch (RuntimeException e){
+            entityManager.getTransaction().rollback();
+            throw new SQLException((e.getMessage()));
         }
     }
 }

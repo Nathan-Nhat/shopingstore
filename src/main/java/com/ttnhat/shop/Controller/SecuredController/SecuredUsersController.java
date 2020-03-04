@@ -1,9 +1,9 @@
-package com.ttnhat.shop.Controller.AdminController;
+package com.ttnhat.shop.Controller.SecuredController;
 
 import com.ttnhat.shop.Annotation.IsAdmin;
 import com.ttnhat.shop.Annotation.IsCustomer;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
-import com.ttnhat.shop.Service.AdminService.UserService.ISecuredUsersService;
+import com.ttnhat.shop.Service.SecuredService.UserService.ISecuredUsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api/secured-user")
+@RequestMapping(value = "/api/secured")
 public class SecuredUsersController {
     Logger logger = LoggerFactory.getLogger(SecuredUsersController.class);
     @Autowired
@@ -37,8 +37,6 @@ public class SecuredUsersController {
         return ResponseEntity.ok(usersEntityList);
     }
 
-    @IsAdmin
-    @IsCustomer
     @GetMapping(value = "/users/{username}")
     public ResponseEntity<UsersEntity> getUserByUserName(@PathVariable(name = "username") String username){
         return ResponseEntity.ok(securedUserService.getUserByUserName(username));
@@ -47,11 +45,5 @@ public class SecuredUsersController {
     @PutMapping(value = "/users/")
     public ResponseEntity<UsersEntity> upDateUser(@RequestBody UsersEntity usersEntity){
         return ResponseEntity.ok(securedUserService.updateUser(usersEntity));
-    }
-
-    @IsAdmin
-    @GetMapping("/products/addAll")
-    public void addAllProduct(){
-
     }
 }

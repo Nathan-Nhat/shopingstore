@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Service.AdminService.UserService;
+package com.ttnhat.shop.Service.SecuredService.UserService;
 
 import com.ttnhat.shop.DAO.NormalDAO.IUsersRepository;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;

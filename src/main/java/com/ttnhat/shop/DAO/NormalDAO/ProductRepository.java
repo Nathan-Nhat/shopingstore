@@ -26,32 +26,6 @@ public class ProductRepository implements IProductRepository {
         return emf.createEntityManager();
     }
     @Override
-    public Page<Product> findAllProduct(Pageable pageable) {
-        EntityManager entityManager = getEntityManager();
-        Page<Product> products = null;
-        try {
-            entityManager.getTransaction().begin();
-            String sql = "select u from Product u";
-            List<Product> productsList = entityManager.createQuery(sql, Product.class)
-                                            .getResultList();
-            Integer total = productsList.size();
-            int page = pageable.getPageNumber();
-            int size = pageable.getPageSize();
-            if (size > total) size = total;
-            List<Product> pagedListProduct = new ArrayList<>(productsList.subList(page * size, (page+1)*size ));
-            Page<Product> pageProduct = new PageImpl<Product>(pagedListProduct, pageable, total);
-            entityManager.getTransaction().commit();
-            entityManager.close();
-            return pageProduct;
-        }
-        catch (RuntimeException e){
-            System.out.println(e.getMessage());
-            entityManager.getTransaction().rollback();
-            throw new SQLException(e.getMessage());
-        }
-    }
-
-    @Override
     public Optional<Product> findById(String id) {
         EntityManager entityManager = getEntityManager();
         Optional<Product> product = null;
@@ -193,16 +167,34 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Page<Product> getProductByName(Pageable pageable, String name, String category) {
+    public Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, List<String> types, List<String> sorts) {
         EntityManager entityManager = getEntityManager();
         String stringSearch = "%"+name+"%";
+        int lengthList = types.size();
+        List<String> sortStr = new ArrayList<>();
+        for (int i = 0; i< lengthList; i ++) {
+            String sortElement = types.get(i) + " " + sorts.get(i);
+            sortStr.add(sortElement);
+        }
+
+        String sqlSort = String.join(",", sortStr);
         try{
             entityManager.getTransaction().begin();
-            String sql = "select u from Product u where u.name like :name and u.category.name = :category";
-            List<Product> products = entityManager.createQuery(sql, Product.class)
-                    .setParameter("name", stringSearch)
-                    .setParameter("category", category)
-                    .getResultList();
+            List<Product> products = null;
+            if (categoryId != 0) {
+                String sqlCategory = "select * from product where name like :name and category_id = :category order by " + sqlSort;
+                System.out.println(sqlCategory);
+                products = entityManager.createNativeQuery(sqlCategory, Product.class)
+                        .setParameter("name", stringSearch)
+                        .setParameter("category", categoryId)
+                        .getResultList();
+            } else {
+                String sqlAll = "select * from product where name like :name order by " + sqlSort;
+                System.out.println(sqlAll);
+                products = entityManager.createNativeQuery(sqlAll, Product.class)
+                        .setParameter("name", stringSearch)
+                        .getResultList();
+            }
             Integer total = products.size();
             int page = pageable.getPageNumber();
             int size = pageable.getPageSize();

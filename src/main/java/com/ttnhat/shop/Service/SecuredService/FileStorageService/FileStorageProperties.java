@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Service.AdminService.FileStorageService;
+package com.ttnhat.shop.Service.SecuredService.FileStorageService;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

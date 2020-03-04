@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Controller.AdminController;
+package com.ttnhat.shop.Controller.SecuredController;
 
 public class MapperEntity {
     private String one;
