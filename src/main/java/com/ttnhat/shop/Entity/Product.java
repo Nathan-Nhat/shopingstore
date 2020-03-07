@@ -37,7 +37,7 @@ public class Product{
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<OrderedProduct> orderedProductList;
+    private List<OrderedProduct> orderedProductList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductDate> productDates = new ArrayList<>();

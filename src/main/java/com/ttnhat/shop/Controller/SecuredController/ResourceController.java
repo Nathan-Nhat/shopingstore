@@ -1,6 +1,6 @@
-package com.ttnhat.shop.Controller.AdminController;
+package com.ttnhat.shop.Controller.SecuredController;
 
-import com.ttnhat.shop.Service.AdminService.FileStorageService.FileStorageProperties;
+import com.ttnhat.shop.Service.SecuredService.FileStorageService.FileStorageProperties;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -1,5 +1,6 @@
 package com.ttnhat.shop.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -9,13 +10,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "ordered_product")
 public class OrderedProduct implements Serializable {
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "customer_order_id", referencedColumnName = "id")
     private CustomerOrder customerOrder;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
@@ -26,10 +30,19 @@ public class OrderedProduct implements Serializable {
     public OrderedProduct() {
     }
 
-    public OrderedProduct(CustomerOrder customerOrder, Product product, Integer quantity) {
+    public OrderedProduct(Integer id, CustomerOrder customerOrder, Product product, Integer quantity) {
         this.customerOrder = customerOrder;
         this.product = product;
         this.quantity = quantity;
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public CustomerOrder getCustomerOrder() {
@@ -56,18 +69,4 @@ public class OrderedProduct implements Serializable {
         this.quantity = quantity;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderedProduct that = (OrderedProduct) o;
-        return Objects.equals(customerOrder, that.customerOrder) &&
-                Objects.equals(product, that.product) &&
-                Objects.equals(quantity, that.quantity);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(customerOrder, product, quantity);
-    }
 }

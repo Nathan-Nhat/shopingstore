@@ -1,4 +1,4 @@
-package com.ttnhat.shop.Service.AdminService.FileStorageService;
+package com.ttnhat.shop.Service.SecuredService.FileStorageService;
 
 import com.ttnhat.shop.Entity.Product;
 import org.springframework.web.multipart.MultipartFile;

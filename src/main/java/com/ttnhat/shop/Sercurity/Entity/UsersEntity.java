@@ -6,13 +6,12 @@ import com.ttnhat.shop.Entity.UsersDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class UsersEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +30,9 @@ public class UsersEntity implements Serializable {
 
     @Column(name = "status")
     private Integer status;
+
+    @OneToMany(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CustomerOrder> customerOrderList = new ArrayList<>();
     public UsersEntity(){};
     public UsersEntity(String username, String password, String roles, Integer status, UsersDetails userDetails,
                        List<CustomerOrder> customerOrderList) {
@@ -38,6 +40,7 @@ public class UsersEntity implements Serializable {
         this.password = password;
         this.roles = roles;
         this.status = status;
+        this.customerOrderList = customerOrderList;
     }
 
     public Integer getId() {
@@ -60,6 +63,13 @@ public class UsersEntity implements Serializable {
         return status;
     }
 
+    public List<CustomerOrder> getCustomerOrderList() {
+        return customerOrderList;
+    }
+
+    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
+        this.customerOrderList = customerOrderList;
+    }
 
     public void setId(Integer id) {
         this.id = id;

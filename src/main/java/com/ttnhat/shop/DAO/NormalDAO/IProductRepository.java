@@ -13,12 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IProductRepository{
-    Page<Product> findAllProduct(Pageable pageable);
     Optional<Product> findById(String id);
     Optional<Product> save(Product product);
     Product editProduct(Product product);
     void updateImage(UpdateImageDetail updateImageDetail);
-    Page<Product> getProductByName(Pageable pageable, String name, String category);
+    Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, List<String> types, List<String> sorts);
     void deleteById(String id);
     void saveTest(Product product);
     List<ProductDate> getDataByDate(Integer date, String productId);
