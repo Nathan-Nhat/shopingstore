@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,8 @@ public class PublicService implements IPublicService{
 
     @Override
     public UsersEntity signUpUser(UsersEntity usersEntity) {
+        Date date = new Date();
+        usersEntity.setDateCreated(date);
         usersEntity.setRoles("CUSTOMER");
         usersEntity.setStatus(1);
         return usersRepository.signUp(usersEntity);
@@ -50,6 +53,10 @@ public class PublicService implements IPublicService{
                 return 3;
             case "Accessories":
                 return 4;
+            case "Cameras":
+                return 5;
+            case "Sports":
+                return 6;
             default:
                 return 0;
         }

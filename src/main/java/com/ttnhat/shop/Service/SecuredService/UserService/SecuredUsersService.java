@@ -14,9 +14,9 @@ public class SecuredUsersService implements ISecuredUsersService {
     @Autowired
     private IUsersRepository usersRepository;
     @Override
-    public Page<UsersEntity> getAllUserByPage(Integer pageNum, Integer pageSize) {
+    public Page<UsersEntity> getAllUserByPage(Integer pageNum, Integer pageSize, String name) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<UsersEntity> pageUsers= usersRepository.findAllUser(pageable);
+        Page<UsersEntity> pageUsers= usersRepository.findAllUser(pageable, name);
         return pageUsers;
     }
 

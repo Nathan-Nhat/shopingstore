@@ -31,15 +31,17 @@ public class UserRepository implements IUsersRepository {
         return emf.createEntityManager();
     }
     @Override
-    public Page<UsersEntity> findAllUser(Pageable pageable) {
+    public Page<UsersEntity> findAllUser(Pageable pageable, String name) {
         EntityManager entityManager = getEntityManager();
-        String sql = "select u from UsersEntity u";
-        String sql1 = "select count(u.id) from UsersEntity u";
+        String nameStr = "%"+name+"%";
+        String sql = "select u from UsersEntity u where u.userDetails.name like :nameStr";
         Page<UsersEntity> pageUsers = null;
         try{
             entityManager.getTransaction().begin();
-            List<UsersEntity> allUser = entityManager.createQuery(sql, UsersEntity.class).getResultList();
-            Long total = entityManager.createQuery(sql1, Long.class).getSingleResult();
+            List<UsersEntity> allUser = entityManager.createQuery(sql, UsersEntity.class)
+                    .setParameter("nameStr", nameStr)
+                    .getResultList();
+            int total = allUser.size();
             pageUsers = new PageImpl<UsersEntity>(allUser, pageable, total);
             entityManager.getTransaction().commit();
             entityManager.close();
@@ -81,9 +83,6 @@ public class UserRepository implements IUsersRepository {
             entityManager.getTransaction().begin();
             userTemp = entityManager.createQuery(findSql, UsersEntity.class).setParameter("username", usersEntity.getUsername())
                                 .getSingleResult();
-            if (userTemp.getRoles().equals("ADMIN")){
-                return userTemp;
-            }
             userTemp.setStatus(usersEntity.getStatus());
             logger.info(userTemp.getUserDetails().toString());
             entityManager.getTransaction().commit();
