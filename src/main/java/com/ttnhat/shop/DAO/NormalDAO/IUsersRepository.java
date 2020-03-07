@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUsersRepository {
-    Page<UsersEntity> findAllUser(Pageable pageable);
+    Page<UsersEntity> findAllUser(Pageable pageable, String name);
     Optional<UsersEntity> findByUsername(String username);
     UsersEntity save(UsersEntity usersEntity);
     UsersEntity signUp(UsersEntity usersEntity);

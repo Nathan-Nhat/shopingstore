@@ -31,9 +31,9 @@ public class SecuredUsersController {
     @IsAdmin
     @GetMapping(value = "/all-users")
     public ResponseEntity<Page<UsersEntity>> getAllUserByPage(@RequestParam(name = "page")Integer pageNum,
-                                                          @RequestParam(name = "size") Integer pageSize)
+                                                          @RequestParam(name = "size") Integer pageSize, @RequestParam(name = "search") String name)
     {
-        Page<UsersEntity> usersEntityList = securedUserService.getAllUserByPage(pageNum, pageSize);
+        Page<UsersEntity> usersEntityList = securedUserService.getAllUserByPage(pageNum, pageSize, name);
         return ResponseEntity.ok(usersEntityList);
     }
 

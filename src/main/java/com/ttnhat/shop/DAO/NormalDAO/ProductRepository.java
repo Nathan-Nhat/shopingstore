@@ -5,6 +5,8 @@ import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.Entity.ProductDate;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import com.ttnhat.shop.Object.UpdateImageDetail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +21,7 @@ import java.util.*;
 
 @Repository
 public class ProductRepository implements IProductRepository {
+    Logger logger = LoggerFactory.getLogger(ProductRepository.class);
     @Autowired
     private EntityManagerFactory emf;
 
@@ -180,6 +183,11 @@ public class ProductRepository implements IProductRepository {
         String sqlSort = String.join(",", sortStr);
         sqlSort = sqlSort.trim();
         String sqlfinal = null;
+<<<<<<< HEAD
+=======
+        logger.info(sqlSort);
+        logger.info(String.valueOf(sqlSort.equals("")));
+>>>>>>> 7037798dd4062aa64a635b2344b3548b20088be7
         if(!sqlSort.equals("")){
             sqlfinal = "order by "+sqlSort;
         } else {

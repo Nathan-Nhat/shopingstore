@@ -7,6 +7,7 @@ import com.ttnhat.shop.Entity.UsersDetails;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class UsersEntity implements Serializable {
     private String roles;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @OneToOne(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @OneToOne(mappedBy = "usersEntity", cascade = CascadeType.ALL, optional = false)
     private UsersDetails userDetails;
 
     @Column(name = "status")
@@ -33,6 +34,10 @@ public class UsersEntity implements Serializable {
 
     @OneToMany(mappedBy = "usersEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrderList = new ArrayList<>();
+
+    @Column(name = "date_created")
+    private Date dateCreated;
+
     public UsersEntity(){};
     public UsersEntity(String username, String password, String roles, Integer status, UsersDetails userDetails,
                        List<CustomerOrder> customerOrderList) {
@@ -99,6 +104,13 @@ public class UsersEntity implements Serializable {
         this.status = status;
     }
 
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
     @Override
     public String toString() {
