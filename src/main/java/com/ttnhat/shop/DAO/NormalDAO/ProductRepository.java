@@ -174,8 +174,6 @@ public class ProductRepository implements IProductRepository {
         String sqlSort = String.join(",", sortStr);
         sqlSort = sqlSort.trim();
         String sqlfinal = null;
-        logger.info(sqlSort);
-        logger.info(String.valueOf(sqlSort.equals("")));
         if(!sqlSort.equals("")){
             sqlfinal = "order by "+sqlSort;
         } else {
