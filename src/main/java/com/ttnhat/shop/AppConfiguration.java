@@ -30,7 +30,9 @@ public class AppConfiguration implements WebMvcConfigurer {
         for (HttpMessageConverter converter : converters) {
             if (converter instanceof org.springframework.http.converter.json.MappingJackson2HttpMessageConverter) {
                 ObjectMapper mapper = ((MappingJackson2HttpMessageConverter) converter).getObjectMapper();
-                mapper.registerModule(new Hibernate5Module());
+                Hibernate5Module hibernate5Module = new Hibernate5Module();
+                hibernate5Module.configure(Hibernate5Module.Feature.USE_TRANSIENT_ANNOTATION, false);
+                mapper.registerModule(hibernate5Module);
             }
         }
     }

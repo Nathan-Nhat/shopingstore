@@ -15,7 +15,7 @@ public class Product{
     @Column(name = "name")
     private String name;
     @Column(name = "price")
-    private String price;
+    private Double price;
     @Column(name = "description")
     private String description;
     @Column(name = "last_update")
@@ -39,10 +39,17 @@ public class Product{
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderedProduct> orderedProductList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private List<ProductDate> productDates = new ArrayList<>();
+    @Transient
+    private String[] listImage;
 
-    public Product(String name, String price, String description, Date lastUpdate,
+    @Column(name = "specification")
+    private String specification;
+    @Column(name = "sale_price")
+    private Double salePrice;
+
+    public Product(String name, Double price, String description, Date lastUpdate,
                    Category category,
                    List<OrderedProduct> orderedProductList, String imageMain, ImageDetailProduct imageDetailProduct,
                    Date dateCreate) {
@@ -66,7 +73,7 @@ public class Product{
         return name;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
@@ -100,7 +107,7 @@ public class Product{
         this.name = name;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -141,6 +148,30 @@ public class Product{
         this.productDates = productDates;
     }
 
+    public String[] getListImage() {
+        return listImage;
+    }
+
+    public void setListImage(String[] listImage) {
+        this.listImage = listImage;
+    }
+
+    public String getSpecification() {
+        return specification;
+    }
+
+    public Double getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification;
+    }
+
+    public void setSalePrice(Double salePrice) {
+        this.salePrice = salePrice;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -153,7 +184,6 @@ public class Product{
                 ", imageDetailProduct=" + imageDetailProduct +
                 ", dateCreate=" + dateCreate +
                 ", category=" + category +
-                ", orderedProductList=" + orderedProductList +
                 '}';
     }
 

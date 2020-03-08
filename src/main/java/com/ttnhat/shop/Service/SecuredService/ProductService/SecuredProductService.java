@@ -23,8 +23,7 @@ public class SecuredProductService implements ISecuredProductService {
     @Autowired
     private ICategoryRepository categoryRepository;
     @Override
-    public Product addSingleProduct(MultipartFile file, Product product, MultipartFile multipartFile1, MultipartFile multipartFile2, MultipartFile multipartFile3,
-                                    MultipartFile multipartFile4, MultipartFile multipartFile5, MultipartFile multipartFile6) {
+    public Product addSingleProduct(MultipartFile[] files, Product product) {
         Date dateNow = new Date();
         Product productTemp = new Product();
         String uniqueID = UUID.randomUUID().toString();
@@ -32,41 +31,24 @@ public class SecuredProductService implements ISecuredProductService {
         productTemp.setName(product.getName());
         productTemp.setPrice(product.getPrice());
         productTemp.setDescription(product.getDescription());
-        if(file != null) {
-            String filepath = fileStorageService.storeFile(file, product, uniqueID);
+        productTemp.setSpecification(product.getSpecification());
+        productTemp.setSalePrice(product.getSalePrice());
+        ImageDetailProduct imageDetailProduct = new ImageDetailProduct();
+        System.out.println(files.length);
+        if(files.length != 0) {
+            String filepath = fileStorageService.storeFile(files[0], product, uniqueID);
             productTemp.setImageMain(filepath);
+            for (int i = 1; i < files.length; i++){
+                String filepath1 = fileStorageService.storeFile(files[i], product, uniqueID);
+                imageDetailProduct = setImageDetail(imageDetailProduct, i, filepath1);
+            }
         }
+        productTemp.setImageDetailProduct(imageDetailProduct);
         productTemp.setLastUpdate(dateNow);
         productTemp.setDateCreate(dateNow);
         productTemp.setCategory(product.getCategory());
-        int i = 0;
-            ImageDetailProduct imageDetailProduct = new ImageDetailProduct();
-            if(multipartFile1 != null) {
-                String filepathDetail1 = fileStorageService.storeFile(multipartFile1, product, uniqueID);
-                imageDetailProduct.setImageDetails1(filepathDetail1);
-            }
-            if(multipartFile2 != null) {
-                String filepathDetail2 = fileStorageService.storeFile(multipartFile2, product, uniqueID);
-                imageDetailProduct.setImageDetails2(filepathDetail2);
-            }
-            if(multipartFile3 != null) {
-                String filepathDetail3 = fileStorageService.storeFile(multipartFile3, product, uniqueID);
-                imageDetailProduct.setImageDetails3(filepathDetail3);
-            }
-            if(multipartFile4 != null) {
-                String filepathDetail4 = fileStorageService.storeFile(multipartFile4, product, uniqueID);
-                imageDetailProduct.setImageDetails4(filepathDetail4);
-            }
-            if(multipartFile5 != null) {
-                String filepathDetail5 = fileStorageService.storeFile(multipartFile5, product, uniqueID);
-                imageDetailProduct.setImageDetails5(filepathDetail5);
-            }
-            if(multipartFile6 != null) {
-                String filepathDetail6 = fileStorageService.storeFile(multipartFile6, product, uniqueID);
-                imageDetailProduct.setImageDetails6(filepathDetail6);
-            }
-            imageDetailProduct.setProduct(productTemp);
-            productTemp.setImageDetailProduct(imageDetailProduct);
+        imageDetailProduct.setProduct(productTemp);
+        System.out.println(imageDetailProduct);
         return productRepository.save(productTemp).orElseThrow(()->new RuntimeException("Cannot save product"));
     }
 
@@ -76,47 +58,25 @@ public class SecuredProductService implements ISecuredProductService {
     }
 
     @Override
-    public Product editProduct(MultipartFile file, Product product, MultipartFile multipartFile1, MultipartFile multipartFile2, MultipartFile multipartFile3,
-                               MultipartFile multipartFile4, MultipartFile multipartFile5, MultipartFile multipartFile6) {
+    public Product editProduct(Product product) {
         Date dateNow = new Date();
         Product productTemp = new Product();
         productTemp.setId(product.getId());
         productTemp.setName(product.getName());
         productTemp.setPrice(product.getPrice());
         productTemp.setDescription(product.getDescription());
-        if(file != null) {
-            String filepath = fileStorageService.storeFile(file, product, product.getId());
-            productTemp.setImageMain(filepath);
-        }
+        productTemp.setSpecification(product.getSpecification());
+        productTemp.setSalePrice(product.getSalePrice());
+        productTemp.setLastUpdate(dateNow);
         productTemp.setCategory(product.getCategory());
-        int i = 0;
+        productTemp.setImageMain(product.getListImage()[0]);
         ImageDetailProduct imageDetailProduct = new ImageDetailProduct();
-        if(multipartFile1 != null) {
-            String filepathDetail1 = fileStorageService.storeFile(multipartFile1, product, product.getId());
-            imageDetailProduct.setImageDetails1(filepathDetail1);
+        for (int i = 1; i < product.getListImage().length; i++){
+            imageDetailProduct = setImageDetail(imageDetailProduct, i, product.getListImage()[i]);
         }
-        if(multipartFile2 != null) {
-            String filepathDetail2 = fileStorageService.storeFile(multipartFile2, product, product.getId());
-            imageDetailProduct.setImageDetails2(filepathDetail2);
-        }
-        if(multipartFile3 != null) {
-            String filepathDetail3 = fileStorageService.storeFile(multipartFile3, product, product.getId());
-            imageDetailProduct.setImageDetails3(filepathDetail3);
-        }
-        if(multipartFile4 != null) {
-            String filepathDetail4 = fileStorageService.storeFile(multipartFile4, product, product.getId());
-            imageDetailProduct.setImageDetails4(filepathDetail4);
-        }
-        if(multipartFile5 != null) {
-            String filepathDetail5 = fileStorageService.storeFile(multipartFile5, product, product.getId());
-            imageDetailProduct.setImageDetails5(filepathDetail5);
-        }
-        if(multipartFile6 != null) {
-            String filepathDetail6 = fileStorageService.storeFile(multipartFile6, product, product.getId());
-            imageDetailProduct.setImageDetails6(filepathDetail6);
-        }
-        imageDetailProduct.setProduct(productTemp);
         productTemp.setImageDetailProduct(imageDetailProduct);
+        System.out.println(imageDetailProduct);;
+        imageDetailProduct.setProduct(productTemp);
         return productRepository.editProduct(productTemp);
     }
 
@@ -162,5 +122,37 @@ public class SecuredProductService implements ISecuredProductService {
     @Override
     public List<ProductDate> getDataByDate(Integer date, String productId) {
         return productRepository.getDataByDate(date, productId);
+    }
+
+    @Override
+    public String saveImage(String id, MultipartFile file, Product product) {
+        String filepath = fileStorageService.storeFile(file, product, id);
+        return filepath;
+    }
+
+    private ImageDetailProduct setImageDetail(ImageDetailProduct imageDetailProduct, int index, String path){
+        switch (index){
+            case 1 :
+                imageDetailProduct.setImageDetails1(path);
+                break;
+            case 2 :
+                imageDetailProduct.setImageDetails2(path);
+                break;
+            case 3 :
+                imageDetailProduct.setImageDetails3(path);
+                break;
+            case 4 :
+                imageDetailProduct.setImageDetails4(path);
+                break;
+            case 5 :
+                imageDetailProduct.setImageDetails5(path);
+                break;
+            case 6 :
+                imageDetailProduct.setImageDetails6(path);
+                break;
+            default:
+                break;
+        }
+        return imageDetailProduct;
     }
 }

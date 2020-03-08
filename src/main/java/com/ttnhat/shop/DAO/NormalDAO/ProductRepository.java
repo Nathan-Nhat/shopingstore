@@ -1,6 +1,7 @@
 package com.ttnhat.shop.DAO.NormalDAO;
 
 import com.ttnhat.shop.Entity.Category;
+import com.ttnhat.shop.Entity.ImageDetailProduct;
 import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.Entity.ProductDate;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
@@ -88,43 +89,33 @@ public class ProductRepository implements IProductRepository {
     public Product editProduct(Product product) {
         EntityManager entityManager = getEntityManager();
         try {
-            System.out.println(product);
             entityManager.getTransaction().begin();
             Product tempProduct = entityManager.find(Product.class, product.getId());
-            tempProduct.setName(product.getName());
+            tempProduct.setCategory(product.getCategory());
+            tempProduct.setLastUpdate(product.getLastUpdate());
+            tempProduct.setSalePrice(product.getSalePrice());
+            tempProduct.setSpecification(product.getSpecification());
+            tempProduct.setImageMain(product.getImageMain());
             tempProduct.setDescription(product.getDescription());
+            tempProduct.setName(product.getName());
             tempProduct.setPrice(product.getPrice());
-            if (product.getLastUpdate() != null) {
-                tempProduct.setLastUpdate(tempProduct.getLastUpdate());
-            }
-            if (product.getImageMain() != null){
-                tempProduct.setImageMain(product.getImageMain());
-            }
-            if (product.getImageDetailProduct().getImageDetails1() != null){
-                tempProduct.getImageDetailProduct().setImageDetails1(product.getImageDetailProduct().getImageDetails1());
-            }
-            if (product.getImageDetailProduct().getImageDetails2() != null){
-                tempProduct.getImageDetailProduct().setImageDetails2(product.getImageDetailProduct().getImageDetails2());
-            }
-            if (product.getImageDetailProduct().getImageDetails3() != null){
-                tempProduct.getImageDetailProduct().setImageDetails3(product.getImageDetailProduct().getImageDetails3());
-            }
-            if (product.getImageDetailProduct().getImageDetails4() != null){
-                tempProduct.getImageDetailProduct().setImageDetails4(product.getImageDetailProduct().getImageDetails4());
-            }
-            if (product.getImageDetailProduct().getImageDetails5() != null){
-                tempProduct.getImageDetailProduct().setImageDetails5(product.getImageDetailProduct().getImageDetails5());
-            }
-            if (product.getImageDetailProduct().getImageDetails6() != null){
-                tempProduct.getImageDetailProduct().setImageDetails1(product.getImageDetailProduct().getImageDetails6());
-            }
+            ImageDetailProduct imageDetailProduct = entityManager.find(ImageDetailProduct.class, product.getId());
+            imageDetailProduct.setImageDetails1(product.getImageDetailProduct().getImageDetails1());
+            imageDetailProduct.setImageDetails2(product.getImageDetailProduct().getImageDetails2());
+            imageDetailProduct.setImageDetails3(product.getImageDetailProduct().getImageDetails3());
+            imageDetailProduct.setImageDetails4(product.getImageDetailProduct().getImageDetails4());
+            imageDetailProduct.setImageDetails5(product.getImageDetailProduct().getImageDetails5());
+            imageDetailProduct.setImageDetails6(product.getImageDetailProduct().getImageDetails6());
+            tempProduct.setImageDetailProduct(imageDetailProduct);
+            System.out.println(tempProduct);
             entityManager.getTransaction().commit();
             entityManager.close();
-            return product;
+            return tempProduct;
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
-            throw new SQLException(e.getMessage());
+            System.out.println(e.getMessage());
         }
+        return product;
     }
 
     @Override

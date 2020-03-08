@@ -25,32 +25,18 @@ public class SecuredProductController {
 
     @IsAdmin
     @PostMapping(value = "/products")
-    public ResponseEntity<Product> addSingleProducts(@RequestPart(name = "files", required = false) MultipartFile file,
-                                                     @RequestPart(name = "properties") Product product,
-                                                     @RequestPart(name = "detailFiles1", required = false) MultipartFile multipartFile1,
-                                                     @RequestPart(name = "detailFiles2", required = false) MultipartFile multipartFile2,
-                                                     @RequestPart(name = "detailFiles3", required = false) MultipartFile multipartFile3,
-                                                     @RequestPart(name = "detailFiles4", required = false) MultipartFile multipartFile4,
-                                                     @RequestPart(name = "detailFiles5", required = false) MultipartFile multipartFile5,
-                                                     @RequestPart(name = "detailFiles6", required = false) MultipartFile multipartFile6
+    public ResponseEntity<Product> addSingleProducts(@RequestPart(name = "files", required = false) MultipartFile[] files,
+                                                     @RequestPart(name = "properties") Product product
     ){
-        System.out.println(product.getCategory());
-
-        return ResponseEntity.ok(securedProductService.addSingleProduct(file, product, multipartFile1, multipartFile2, multipartFile3, multipartFile4, multipartFile5, multipartFile6));
+        System.out.println(files.length);
+        System.out.println("test===========================");
+        return ResponseEntity.ok(securedProductService.addSingleProduct(files, product));
     }
     @IsAdmin
     @PutMapping(value = "/products")
-    public ResponseEntity<Product> editSingleProducts(@RequestPart(name = "files", required = false) MultipartFile file,
-                                                      @RequestPart(name = "properties") Product product,
-                                                      @RequestPart(name = "detailFiles1", required = false) MultipartFile multipartFile1,
-                                                      @RequestPart(name = "detailFiles2", required = false) MultipartFile multipartFile2,
-                                                      @RequestPart(name = "detailFiles3", required = false) MultipartFile multipartFile3,
-                                                      @RequestPart(name = "detailFiles4", required = false) MultipartFile multipartFile4,
-                                                      @RequestPart(name = "detailFiles5", required = false) MultipartFile multipartFile5,
-                                                      @RequestPart(name = "detailFiles6", required = false) MultipartFile multipartFile6){
-        System.out.println(product.getCategory());
-
-        return ResponseEntity.ok(securedProductService.editProduct(file, product, multipartFile1, multipartFile2, multipartFile3, multipartFile4, multipartFile5, multipartFile6));
+    public ResponseEntity<Product> editSingleProducts(@RequestBody Product product){
+        System.out.println(product.getId());
+        return ResponseEntity.ok(securedProductService.editProduct(product));
     }
     @IsAdmin
     @PutMapping(value = "/products/updateImage")
@@ -85,5 +71,13 @@ public class SecuredProductController {
     public ResponseEntity<List<ProductDate>> getDataByDate(@RequestParam(name = "numDateBefore") Integer numDate,
                                                     @RequestParam(name = "product_id") String productId){
         return ResponseEntity.ok(securedProductService.getDataByDate(numDate, productId));
+    }
+
+    @IsAdmin
+    @PostMapping(value = "/products/{id}/images")
+    public ResponseEntity<ResponseObject> saveImage(@PathVariable(name = "id") String id, @RequestPart(name= "file") MultipartFile file,
+                                                    @RequestPart(name = "properties") Product product){
+        String filepath = securedProductService.saveImage(id, file, product);
+        return ResponseEntity.ok(new ResponseObject("Success", filepath));
     }
 }

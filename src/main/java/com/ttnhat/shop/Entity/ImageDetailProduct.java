@@ -2,6 +2,7 @@ package com.ttnhat.shop.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class ImageDetailProduct {
     @Column(name = "image_detail_6")
     private String imageDetails6;
     @JsonIgnore
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId
     @JoinColumn(name = "id")
     private Product product;
@@ -111,5 +112,18 @@ public class ImageDetailProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Override
+    public String toString() {
+        return "ImageDetailProduct{" +
+                "id='" + id + '\'' +
+                ", imageDetails1='" + imageDetails1 + '\'' +
+                ", imageDetails2='" + imageDetails2 + '\'' +
+                ", imageDetails3='" + imageDetails3 + '\'' +
+                ", imageDetails4='" + imageDetails4 + '\'' +
+                ", imageDetails5='" + imageDetails5 + '\'' +
+                ", imageDetails6='" + imageDetails6 + '\'' +
+                '}';
     }
 }
