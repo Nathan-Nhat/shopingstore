@@ -29,9 +29,12 @@ public class OrderProductController {
         return ResponseEntity.ok(new ResponseObject("Success", "Ordered Successfully"));
     }
 
-    @GetMapping(value = "/orders")
-    public ResponseEntity<List<CustomerOrder>> getOrdersOfUser(@RequestParam(name = "username") String username){
-        return ResponseEntity.ok(orderService.getOrdersOfUser(username));
+    @GetMapping(value = "/users/{username}/orders")
+    public ResponseEntity<List<CustomerOrder>> getOrdersOfUser(@PathVariable(name = "username") String username,
+                                                               @RequestParam(name = "status") String status,
+                                                               @RequestParam(name = "type") String type,
+                                                               @RequestParam(name = "sort") String sort){
+        return ResponseEntity.ok(orderService.getOrdersOfUser(username, status, type, sort));
     }
 
     @GetMapping(value = "/orders/id/{id}")
@@ -40,8 +43,15 @@ public class OrderProductController {
     }
     @IsAdmin
     @PutMapping(value = "/orders/status")
-    public ResponseEntity<ResponseObject> changeStatusOrder(@RequestParam(name = "id") Integer id, @RequestParam(name = "status") Integer status){
+    public ResponseEntity<ResponseObject> changeStatusOrder(@RequestParam(name = "id") Integer id, @RequestParam(name = "status") String status){
         orderService.changeStatusOrder(id, status);
         return ResponseEntity.ok(new ResponseObject("Success", "Change status of Order Successfully"));
+    }
+
+    @IsAdmin
+    @GetMapping(value = "/orders")
+    public ResponseEntity<List<OrderedProduct>> getAllOrder(@RequestParam(name = "category") String category, @RequestParam(name = "status") String status,
+                                                            @RequestParam(name = "type") String type, @RequestParam(name = "sort") String sort){
+        return ResponseEntity.ok(orderService.getAllOrder(category, status, type, sort));
     }
 }

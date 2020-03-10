@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,14 +50,16 @@ public class OrderRepository implements IOrderRepository{
     }
 
     @Override
-    public List<CustomerOrder> getOrderByUser(String username) {
+    public List<CustomerOrder> getOrderByUser(String username, String status, String orderType) {
         EntityManager entityManager = getEntityManager();
         try{
             entityManager.getTransaction().begin();
-            String sql = "select u from CustomerOrder u where u.usersEntity.username = :username";
-            List<CustomerOrder> customerOrderList = entityManager.createQuery(sql, CustomerOrder.class)
+            String sql = "select u from CustomerOrder u where u.usersEntity.username = :username and u.isDone = :status " +orderType;
+            List<CustomerOrder>  customerOrderList = entityManager.createQuery(sql, CustomerOrder.class)
                     .setParameter("username", username)
+                    .setParameter("status", status)
                     .getResultList();
+
             entityManager.getTransaction().commit();
             entityManager.close();
             return customerOrderList;
@@ -86,7 +89,7 @@ public class OrderRepository implements IOrderRepository{
     }
 
     @Override
-    public void changeStatusOrder(Integer id, Integer status) {
+    public void changeStatusOrder(Integer id, String status) {
         EntityManager entityManager = getEntityManager();
         try{
             entityManager.getTransaction().begin();
@@ -97,6 +100,23 @@ public class OrderRepository implements IOrderRepository{
             customerOrderList.get(0).setIsDone(status);
             entityManager.getTransaction().commit();
             entityManager.close();
+        } catch (RuntimeException e){
+            entityManager.getTransaction().rollback();
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<OrderedProduct> getAllOrder(String category, String status, String typeSort) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            String sql = "select u from OrderedProduct u";
+            List<OrderedProduct> orderedProductList = entityManager.createQuery(sql, OrderedProduct.class)
+                    .getResultList();
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            return orderedProductList;
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
             throw new SQLException(e.getMessage());

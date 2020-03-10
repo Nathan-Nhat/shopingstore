@@ -4,6 +4,7 @@ import com.ttnhat.shop.DAO.NormalDAO.IProductRepository;
 import com.ttnhat.shop.DAO.NormalDAO.IUsersRepository;
 import com.ttnhat.shop.Entity.Product;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+import com.ttnhat.shop.Tools.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +30,8 @@ public class PublicService implements IPublicService{
     @Override
     public Page<Product> getProductBySearchName(String name, Integer page, Integer size, String category, String types, String sorts) {
         Pageable pageable = PageRequest.of(page, size);
-        List<String> typeList = Arrays.stream(types.split(",")).collect(Collectors.toList());
-        List<String> sortList = Arrays.stream(sorts.split(",")).collect(Collectors.toList());
-            return productRepository.getProductByName(pageable, name, ConvertCategoryNameToId(category), typeList, sortList);
+            String typeSort = Tools.convertStringToOrder(types, sorts);
+            return productRepository.getProductByName(pageable, name, ConvertCategoryNameToId(category), typeSort);
     }
 
     @Override

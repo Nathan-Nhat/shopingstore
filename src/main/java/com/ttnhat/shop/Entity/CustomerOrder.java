@@ -26,7 +26,7 @@ public class CustomerOrder {
     private List<OrderedProduct> orderedProductList = new ArrayList<>();
 
     @Column(name = "is_done")
-    private Integer isDone;
+    private String isDone;
 
     public CustomerOrder() {
     }
@@ -62,11 +62,11 @@ public class CustomerOrder {
         this.usersEntity = usersEntity;
     }
 
-    public Integer getIsDone() {
+    public String getIsDone() {
         return isDone;
     }
 
-    public void setIsDone(Integer isDone) {
+    public void setIsDone(String isDone) {
         this.isDone = isDone;
     }
 

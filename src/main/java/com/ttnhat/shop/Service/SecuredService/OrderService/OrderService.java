@@ -3,6 +3,7 @@ package com.ttnhat.shop.Service.SecuredService.OrderService;
 import com.ttnhat.shop.DAO.NormalDAO.IOrderRepository;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
+import com.ttnhat.shop.Tools.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,9 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public List<CustomerOrder> getOrdersOfUser(String username) {
-        return orderRepository.getOrderByUser(username);
+    public List<CustomerOrder> getOrdersOfUser(String username, String status, String type, String sort) {
+            String orderType = Tools.convertStringToOrder(type, sort);
+            return orderRepository.getOrderByUser(username, status, orderType);
     }
 
     @Override
@@ -28,7 +30,13 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public void changeStatusOrder(Integer id, Integer status) {
+    public void changeStatusOrder(Integer id, String status) {
         orderRepository.changeStatusOrder(id, status);
+    }
+
+    @Override
+    public List<OrderedProduct> getAllOrder(String category, String status, String type, String sort) {
+        String orderType = Tools.convertStringToOrder(type, sort);
+        return orderRepository.getAllOrder(category, status, orderType);
     }
 }

@@ -33,12 +33,12 @@ public class UserRepository implements IUsersRepository {
     @Override
     public Page<UsersEntity> findAllUser(Pageable pageable, String name) {
         EntityManager entityManager = getEntityManager();
-        String nameStr = "%"+name+"%";
-        String sql = "select u from UsersEntity u where u.userDetails.name like :nameStr";
+        String nameStr = name+"*";
+        String sql = "select * from user where match (name) against (:name in boolean mode)";
         Page<UsersEntity> pageUsers = null;
         try{
             entityManager.getTransaction().begin();
-            List<UsersEntity> allUser = entityManager.createQuery(sql, UsersEntity.class)
+            List<UsersEntity> allUser = entityManager.createNativeQuery(sql, UsersEntity.class)
                     .setParameter("nameStr", nameStr)
                     .getResultList();
             int total = allUser.size();

@@ -1,27 +1,27 @@
 package com.ttnhat.shop.Controller.ResponseObject;
 
-public class ResponseObject {
-    private String type;
-    private String message;
+public class ResponseObject<T, K> {
+    private T type;
+    private K message;
 
-    public ResponseObject(String type, String message) {
+    public ResponseObject(T type, K message) {
         this.type = type;
         this.message = message;
     }
 
-    public String getType() {
+    public T getType() {
         return type;
     }
 
-    public String getMessage() {
+    public K getMessage() {
         return message;
     }
 
-    public void setType(String type) {
+    public void setType(T type) {
         this.type = type;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(K message) {
         this.message = message;
     }
 }

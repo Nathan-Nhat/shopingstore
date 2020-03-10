@@ -161,39 +161,24 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, List<String> types, List<String> sorts) {
+    public Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, String typeSort) {
         EntityManager entityManager = getEntityManager();
-        String stringSearch = "%"+name+"%";
-        int lengthList = types.size();
-        List<String> sortStr = new ArrayList<>();
-        for (int i = 0; i< lengthList; i ++) {
-            String sortElement = types.get(i) + " " + sorts.get(i);
-            sortStr.add(sortElement);
-        }
-
-        String sqlSort = String.join(",", sortStr);
-        sqlSort = sqlSort.trim();
-        String sqlfinal = null;
-        if(!sqlSort.equals("")){
-            sqlfinal = "order by "+sqlSort;
-        } else {
-            sqlfinal = "";
-        }
         try{
             entityManager.getTransaction().begin();
             List<Product> products = null;
+            String finalName = name+"*";
             if (categoryId != 0) {
-                String sqlCategory = "select * from product where name like :name and category_id = :category " + sqlfinal;
+                String sqlCategory = "select * from product where match (name) against (:name in boolean mode) and category_id = :category " + typeSort;
                 System.out.println(sqlCategory);
                 products = entityManager.createNativeQuery(sqlCategory, Product.class)
-                        .setParameter("name", stringSearch)
+                        .setParameter("name", finalName)
                         .setParameter("category", categoryId)
                         .getResultList();
             } else {
-                String sqlAll = "select * from product where name like :name " + sqlfinal;
+                String sqlAll = "select * from product where match (name in boolean mode) against (:name) " + typeSort;
                 System.out.println(sqlAll);
                 products = entityManager.createNativeQuery(sqlAll, Product.class)
-                        .setParameter("name", stringSearch)
+                        .setParameter("name", finalName)
                         .getResultList();
             }
             Integer total = products.size();

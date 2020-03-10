@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface IOrderService {
     void addOrder(List<OrderedProduct> orderedProduct, String username);
-    List<CustomerOrder> getOrdersOfUser(String username);
+    List<CustomerOrder> getOrdersOfUser(String username, String status, String type, String sort);
     CustomerOrder getOrderById(Integer id);
-    void changeStatusOrder(Integer id, Integer status);
+    void changeStatusOrder(Integer id, String status);
+
+    List<OrderedProduct> getAllOrder(String category, String status, String type, String sort);
 }

@@ -17,7 +17,7 @@ public interface IProductRepository{
     Optional<Product> save(Product product);
     Product editProduct(Product product);
     void updateImage(UpdateImageDetail updateImageDetail);
-    Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, List<String> types, List<String> sorts);
+    Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, String typeSort);
     void deleteById(String id);
     void saveTest(Product product);
     List<ProductDate> getDataByDate(Integer date, String productId);

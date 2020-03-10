@@ -78,6 +78,6 @@ public class SecuredProductController {
     public ResponseEntity<ResponseObject> saveImage(@PathVariable(name = "id") String id, @RequestPart(name= "file") MultipartFile file,
                                                     @RequestPart(name = "properties") Product product){
         String filepath = securedProductService.saveImage(id, file, product);
-        return ResponseEntity.ok(new ResponseObject("Success", filepath));
+        return ResponseEntity.ok(new ResponseObject<String, String>("Success", filepath));
     }
 }
