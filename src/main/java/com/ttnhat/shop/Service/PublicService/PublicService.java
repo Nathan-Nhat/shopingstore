@@ -30,8 +30,16 @@ public class PublicService implements IPublicService{
     @Override
     public Page<Product> getProductBySearchName(String name, Integer page, Integer size, String category, String types, String sorts) {
         Pageable pageable = PageRequest.of(page, size);
-            String typeSort = Tools.convertStringToOrder(types, sorts);
-            return productRepository.getProductByName(pageable, name, ConvertCategoryNameToId(category), typeSort);
+        String nameFullText = null;
+        String tempName = name.trim();
+        if (tempName.length() == 0) {
+            nameFullText = "";
+        }
+        else {
+            nameFullText = Tools.exactNameToFullText(name);
+        }
+        String typeSort = Tools.convertStringToOrder(types, sorts);
+        return productRepository.getProductByName(pageable, nameFullText, ConvertCategoryNameToId(category), typeSort);
     }
 
     @Override

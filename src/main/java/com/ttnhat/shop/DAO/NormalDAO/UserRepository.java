@@ -31,16 +31,23 @@ public class UserRepository implements IUsersRepository {
         return emf.createEntityManager();
     }
     @Override
-    public Page<UsersEntity> findAllUser(Pageable pageable, String name) {
+    public Page<UsersEntity> findAllUser(Pageable pageable, String fullTextName) {
         EntityManager entityManager = getEntityManager();
-        String nameStr = name+"*";
-        String sql = "select * from user where match (name) against (:name in boolean mode)";
+        String sql = null;
         Page<UsersEntity> pageUsers = null;
+        List<UsersEntity> allUser = null;
         try{
             entityManager.getTransaction().begin();
-            List<UsersEntity> allUser = entityManager.createNativeQuery(sql, UsersEntity.class)
-                    .setParameter("nameStr", nameStr)
-                    .getResultList();
+            if(fullTextName.length() == 0){
+                sql = "select * from users inner join user_details on users.id = user_details.user_id";
+                allUser = entityManager.createNativeQuery(sql, UsersEntity.class)
+                        .getResultList();
+            } else {
+                sql = "select * from users inner join user_details on users.id = user_details.user_id where match (name) against (:fullTextName in boolean mode)";
+                allUser = entityManager.createNativeQuery(sql, UsersEntity.class)
+                        .setParameter("fullTextName", fullTextName)
+                        .getResultList();
+            }
             int total = allUser.size();
             pageUsers = new PageImpl<UsersEntity>(allUser, pageable, total);
             entityManager.getTransaction().commit();

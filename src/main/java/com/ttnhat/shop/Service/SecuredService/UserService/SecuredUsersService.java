@@ -2,6 +2,7 @@ package com.ttnhat.shop.Service.SecuredService.UserService;
 
 import com.ttnhat.shop.DAO.NormalDAO.IUsersRepository;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+import com.ttnhat.shop.Tools.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,13 @@ public class SecuredUsersService implements ISecuredUsersService {
     @Override
     public Page<UsersEntity> getAllUserByPage(Integer pageNum, Integer pageSize, String name) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<UsersEntity> pageUsers= usersRepository.findAllUser(pageable, name);
+        String fullTextName = null;
+        if (name.length() == 0){
+            fullTextName = "";
+        } else {
+            fullTextName = Tools.exactNameToFullText(name);
+        }
+        Page<UsersEntity> pageUsers= usersRepository.findAllUser(pageable, fullTextName);
         return pageUsers;
     }
 

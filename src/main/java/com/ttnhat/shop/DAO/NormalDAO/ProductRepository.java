@@ -161,25 +161,39 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Page<Product> getProductByName(Pageable pageable, String name, Integer categoryId, String typeSort) {
+    public Page<Product> getProductByName(Pageable pageable, String nameFullText, Integer categoryId, String typeSort) {
         EntityManager entityManager = getEntityManager();
         try{
             entityManager.getTransaction().begin();
             List<Product> products = null;
-            String finalName = name+"*";
             if (categoryId != 0) {
-                String sqlCategory = "select * from product where match (name) against (:name in boolean mode) and category_id = :category " + typeSort;
+                String sqlCategory;
+                if (nameFullText.length() == 0){
+                    sqlCategory = "select * from product where  category_id = :category " + typeSort;
+                    products = entityManager.createNativeQuery(sqlCategory, Product.class)
+                            .setParameter("category", categoryId)
+                            .getResultList();
+                } else {
+                    sqlCategory = "select * from product where match (name) against (:name in boolean mode) and category_id = :category " + typeSort;
+                    products = entityManager.createNativeQuery(sqlCategory, Product.class)
+                            .setParameter("name", nameFullText)
+                            .setParameter("category", categoryId)
+                            .getResultList();
+                }
                 System.out.println(sqlCategory);
-                products = entityManager.createNativeQuery(sqlCategory, Product.class)
-                        .setParameter("name", finalName)
-                        .setParameter("category", categoryId)
-                        .getResultList();
             } else {
-                String sqlAll = "select * from product where match (name in boolean mode) against (:name) " + typeSort;
+                String sqlAll;
+                if (nameFullText.length() == 0){
+                    sqlAll =  "select * from product " + typeSort;
+                    products = entityManager.createNativeQuery(sqlAll, Product.class)
+                            .getResultList();
+                } else {
+                    sqlAll = "select * from product where match (name) against (:name in boolean mode) " + typeSort;
+                    products = entityManager.createNativeQuery(sqlAll, Product.class)
+                            .setParameter("name", nameFullText)
+                            .getResultList();
+                }
                 System.out.println(sqlAll);
-                products = entityManager.createNativeQuery(sqlAll, Product.class)
-                        .setParameter("name", finalName)
-                        .getResultList();
             }
             Integer total = products.size();
             int page = pageable.getPageNumber();

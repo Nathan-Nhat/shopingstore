@@ -32,4 +32,15 @@ public class Tools {
         System.out.println(newDate);
         return  newDate;
     }
+
+    static public String exactNameToFullText(String name){
+        int length = name.length();
+        String[] arrRet = new String[length];
+        String[] arrayStr = name.split(" ");
+        for (int i = 0; i< arrayStr.length; i++){
+            arrRet[i] = "+" + arrayStr[i] + "*";
+        }
+        String ret = String.join(" ", arrRet);
+        return ret;
+    }
 }
