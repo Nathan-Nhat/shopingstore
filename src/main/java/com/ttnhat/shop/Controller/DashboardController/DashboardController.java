@@ -1,5 +1,7 @@
 package com.ttnhat.shop.Controller.DashboardController;
 
+import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
+import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
 import com.ttnhat.shop.Controller.ResponseObject.ResponseObject;
 import com.ttnhat.shop.Service.DashboardService.IDashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
+import java.util.List;
 
 @Controller
 @CrossOrigin
@@ -27,5 +29,25 @@ public class DashboardController {
     @GetMapping(value = "/total-orders")
     public  ResponseEntity<ResponseObject> getTotalOrders(@RequestParam(name = "num-days")Integer numDays){
         return ResponseEntity.ok(new ResponseObject("Success", dashboardService.getTotalOrders(numDays)));
+    }
+
+    @GetMapping(value = "/total-users")
+    public ResponseEntity<ResponseObject> getTotalUsers(@RequestParam(name = "num-days") Integer numDays){
+        return ResponseEntity.ok(new ResponseObject("Success", dashboardService.getTotalUsers(numDays)));
+    }
+
+    @GetMapping(value = "/revenue")
+    public ResponseEntity<ResponseObject> getRevenue(@RequestParam(name = "num-days") Integer numDays){
+        return ResponseEntity.ok(new ResponseObject("Success", dashboardService.getRevenue(numDays)));
+    }
+
+    @GetMapping(value = "/analyst/click")
+    public ResponseEntity<List<AnalystClickDTO>> getAnalystClick(@RequestParam(name = "num-days") Integer numDays){
+        return ResponseEntity.ok(dashboardService.getAnalystClick(numDays));
+    }
+
+    @GetMapping(value = "/analyst/orders")
+    public ResponseEntity<List<AnalystOrdersDTO>> getAnalystOrders(@RequestParam(name = "num-days") Integer numDays){
+        return ResponseEntity.ok(dashboardService.getAnalystOrders(numDays));
     }
 }
