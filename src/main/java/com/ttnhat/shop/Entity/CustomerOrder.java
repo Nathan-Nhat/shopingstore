@@ -18,7 +18,8 @@ public class CustomerOrder {
     private Integer id;
     @Column(name = "date_create")
     private Date dateCreate;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private UsersEntity usersEntity;
 

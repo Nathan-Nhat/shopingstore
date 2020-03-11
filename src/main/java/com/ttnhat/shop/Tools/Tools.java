@@ -38,7 +38,7 @@ public class Tools {
         String[] arrRet = new String[length];
         String[] arrayStr = name.split(" ");
         for (int i = 0; i< arrayStr.length; i++){
-            arrRet[i] = "+" + arrayStr[i] + "*";
+            arrRet[i] = "+" +arrayStr[i] + "*";
         }
         String ret = String.join(" ", arrRet);
         return ret;

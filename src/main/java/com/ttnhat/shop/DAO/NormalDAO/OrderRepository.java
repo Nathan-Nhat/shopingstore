@@ -4,6 +4,8 @@ import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Repository
 public class OrderRepository implements IOrderRepository{
 
+    private Logger logger = LoggerFactory.getLogger(OrderRepository.class);
     @Autowired
     private EntityManagerFactory emf;
 
@@ -36,6 +39,7 @@ public class OrderRepository implements IOrderRepository{
             CustomerOrder customerOrder = new CustomerOrder();
             customerOrder.setDateCreate(new Date());
             customerOrder.setUsersEntity(usersList.get(0));
+            customerOrder.setIsDone("INPROGRESS");
             for (OrderedProduct element : orderedProduct){
                 element.setCustomerOrder(customerOrder);
                 customerOrder.getOrderedProductList().add(element);
@@ -45,7 +49,7 @@ public class OrderRepository implements IOrderRepository{
             entityManager.close();
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
-            throw new SQLException(e.getMessage());
+            throw new SQLException(e.getCause().getMessage());
         }
     }
 
@@ -65,7 +69,7 @@ public class OrderRepository implements IOrderRepository{
             return customerOrderList;
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
-            throw new SQLException(e.getMessage());
+            throw new SQLException(e.getCause().getMessage());
         }
     }
 

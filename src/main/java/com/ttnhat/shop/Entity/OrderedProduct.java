@@ -69,4 +69,13 @@ public class OrderedProduct implements Serializable {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "OrderedProduct{" +
+                "id=" + id +
+                ", customerOrder=" + customerOrder +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

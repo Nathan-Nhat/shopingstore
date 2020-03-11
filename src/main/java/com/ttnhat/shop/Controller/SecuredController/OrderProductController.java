@@ -6,6 +6,8 @@ import com.ttnhat.shop.Controller.ResponseObject.ResponseObject;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
 import com.ttnhat.shop.Service.SecuredService.OrderService.IOrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping(value = "/api/secured")
 public class OrderProductController {
-
+    private Logger logger = LoggerFactory.getLogger(OrderProductController.class);
     @Autowired
     private IOrderService orderService;
     @PostMapping(value = "/orders")
@@ -39,6 +41,7 @@ public class OrderProductController {
 
     @GetMapping(value = "/orders/id/{id}")
     public ResponseEntity<CustomerOrder> getOrderByOrderId(@PathVariable(name = "id") Integer id){
+
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
     @IsAdmin
