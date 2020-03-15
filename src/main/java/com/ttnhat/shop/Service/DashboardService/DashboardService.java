@@ -48,6 +48,7 @@ public class DashboardService implements IDashboardService{
     @Override
     public List<AnalystOrdersDTO> getAnalystOrders(Integer numDays) {
         Date newDate = Tools.findBeforeDays(numDays);
-        return dashboardRepository.getAnalystOrders(newDate);
+        List<AnalystOrdersDTO> tempList = dashboardRepository.getAnalystOrders(newDate);
+        return Tools.fillEmptyDate(tempList, newDate);
     }
 }

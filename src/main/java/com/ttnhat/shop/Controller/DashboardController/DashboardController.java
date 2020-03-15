@@ -48,6 +48,7 @@ public class DashboardController {
 
     @GetMapping(value = "/analyst/orders")
     public ResponseEntity<List<AnalystOrdersDTO>> getAnalystOrders(@RequestParam(name = "num-days") Integer numDays){
+
         return ResponseEntity.ok(dashboardService.getAnalystOrders(numDays));
     }
 }

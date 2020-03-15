@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 @Configuration
 public class AppConfiguration implements WebMvcConfigurer {
@@ -33,6 +34,7 @@ public class AppConfiguration implements WebMvcConfigurer {
                 ObjectMapper mapper = ((MappingJackson2HttpMessageConverter) converter).getObjectMapper();
                 Hibernate5Module hibernate5Module = new Hibernate5Module();
                 hibernate5Module.configure(Hibernate5Module.Feature.USE_TRANSIENT_ANNOTATION, false);
+                mapper.setTimeZone(TimeZone.getDefault());
                 mapper.registerModule(hibernate5Module);
             }
         }

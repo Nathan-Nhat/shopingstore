@@ -128,16 +128,17 @@ public class DashboardRepository implements IDashboardRepository{
         EntityManager entityManager = getEntityManager();
         try {
             entityManager.getTransaction().begin();
-            String sql = "select customer_order.date_create, count(customer_order.id)\n" +
+            String sql = "select cast(customer_order.date_create as date), count(customer_order.id)\n" +
                     "from customer_order\n" +
-                    "where customer_order.date_create > :newDate\n" +
-                    "group by cast(customer_order.date_create as date)";
+                    "where customer_order.date_create > cast(:newDate as date)\n" +
+                    "group by cast(customer_order.date_create as date) order by customer_order.date_create asc";
             List<Object[]> analystOrdersDTOS = entityManager.createNativeQuery(sql)
                     .setParameter("newDate", newDate)
                     .getResultList();
             List<AnalystOrdersDTO> analystOrdersDTOList = new ArrayList<>();
             for(Object[] objects : analystOrdersDTOS){
-                AnalystOrdersDTO analystOrdersDTO = new AnalystOrdersDTO((Date) objects[0], new Long(objects[1].toString()));
+                Date date = (Date)objects[0];
+                AnalystOrdersDTO analystOrdersDTO = new AnalystOrdersDTO(new Date(date.getTime()), new Long(objects[1].toString()));
                 analystOrdersDTOList.add(analystOrdersDTO);
             }
             entityManager.getTransaction().commit();

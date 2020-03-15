@@ -4,6 +4,7 @@ import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+import com.ttnhat.shop.Tools.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,12 @@ public class OrderRepository implements IOrderRepository{
                     .getResultList();
             System.out.println(usersList.get(0));
             CustomerOrder customerOrder = new CustomerOrder();
-            customerOrder.setDateCreate(new Date());
+//            customerOrder.setDateCreate(new Date());
+            //fake orders
+            Integer day = Math.toIntExact(Math.round(Math.random() * 7));
+            Date dateFake = Tools.findBeforeDays(day);
+            customerOrder.setDateCreate(dateFake);
+            //
             customerOrder.setUsersEntity(usersList.get(0));
             customerOrder.setIsDone("INPROGRESS");
             for (OrderedProduct element : orderedProduct){
