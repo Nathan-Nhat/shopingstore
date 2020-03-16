@@ -72,13 +72,13 @@ public class Tools {
 
         Date nowDate = new Date();
         int i = 0;
-        for (AnalystOrdersDTO element : analystOrdersDTOS){
-        }
+        int length = analystOrdersDTOS.size();
         while (compareDate(tempDate, nowDate) < 0) {
             AnalystOrdersDTO element = analystOrdersDTOS.get(i);
             if (compareDate(element.getDate(), tempDate) == 0 ){
                 result.add(element);
-                i++;
+                if (i < length - 1)
+                i ++;
             } else {
                 AnalystOrdersDTO temp = null;
                 try {

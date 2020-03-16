@@ -131,7 +131,7 @@ public class DashboardRepository implements IDashboardRepository{
             String sql = "select cast(customer_order.date_create as date), count(customer_order.id)\n" +
                     "from customer_order\n" +
                     "where customer_order.date_create > cast(:newDate as date)\n" +
-                    "group by cast(customer_order.date_create as date) order by customer_order.date_create asc";
+                    "group by cast(customer_order.date_create as date) order by cast(customer_order.date_create as date) asc";
             List<Object[]> analystOrdersDTOS = entityManager.createNativeQuery(sql)
                     .setParameter("newDate", newDate)
                     .getResultList();
