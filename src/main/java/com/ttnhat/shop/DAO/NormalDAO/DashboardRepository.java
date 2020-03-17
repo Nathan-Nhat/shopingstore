@@ -160,12 +160,13 @@ public class DashboardRepository implements IDashboardRepository{
                     "from ordered_product\n" +
                     "inner join  product on product.id = ordered_product.product_id\n"+
                     "inner join customer_order on ordered_product.customer_order_id = customer_order.id\n" +
-                    "where customer_order.date_create > cast(:newDate as date)\n" +
+                    "where customer_order.date_create > cast(:newDate as date) and customer_order.is_done = 'INPROGRESS'\n" +
                     "group by cast(customer_order.date_create as date) order by cast(customer_order.date_create as date) asc";
             List<Object[]> analystRevenueDTOS = entityManager.createNativeQuery(sql)
                     .setParameter("newDate", newDate)
                     .getResultList();
             List<AnalystRevenueDTO> analystRevenueDTOList = new ArrayList<>();
+            if (analystRevenueDTOS.isEmpty()) return analystRevenueDTOList;
             for(Object[] objects : analystRevenueDTOS){
                 Date date = (Date)objects[0];
                 AnalystRevenueDTO analystRevenueDTO = new AnalystRevenueDTO(new Date(date.getTime()), new Long(objects[1].toString()));

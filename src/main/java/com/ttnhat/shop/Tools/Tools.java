@@ -96,8 +96,8 @@ public class Tools {
     static public List<AnalystRevenueDTO> fillEmptyDateRevenue(List<AnalystRevenueDTO> analystRevenueDTOS, Date beginDate){
         List<AnalystRevenueDTO> result = new ArrayList<>();
         Date tempDate = beginDate;
-
         Date nowDate = new Date();
+        if (analystRevenueDTOS.isEmpty()) analystRevenueDTOS.add(new AnalystRevenueDTO(nowDate, new Long(0)));
         int i = 0;
         int length = analystRevenueDTOS.size();
         while (compareDate(tempDate, nowDate) < 0) {

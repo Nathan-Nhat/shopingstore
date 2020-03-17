@@ -2,6 +2,7 @@ package com.ttnhat.shop.Controller.SecuredController;
 
 import com.ttnhat.shop.Annotation.IsAdmin;
 import com.ttnhat.shop.Annotation.IsCustomer;
+import com.ttnhat.shop.Controller.ResponseObject.OrdersSummaryDTO;
 import com.ttnhat.shop.Controller.ResponseObject.ResponseObject;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
@@ -56,5 +57,10 @@ public class OrderProductController {
     public ResponseEntity<List<OrderedProduct>> getAllOrder(@RequestParam(name = "category") String category, @RequestParam(name = "status") String status,
                                                             @RequestParam(name = "type") String type, @RequestParam(name = "sort") String sort){
         return ResponseEntity.ok(orderService.getAllOrder(category, status, type, sort));
+    }
+    @IsAdmin
+    @GetMapping(value = "/orders/summary")
+    public ResponseEntity<List<OrdersSummaryDTO>> getOrdersSummary(@RequestParam(name = "top")Integer top){
+        return ResponseEntity.ok(orderService.getOrdersSummary(top));
     }
 }

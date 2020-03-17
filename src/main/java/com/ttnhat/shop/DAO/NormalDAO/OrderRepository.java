@@ -1,9 +1,11 @@
 package com.ttnhat.shop.DAO.NormalDAO;
 
+import com.ttnhat.shop.Controller.ResponseObject.OrdersSummaryDTO;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import com.ttnhat.shop.Sercurity.Entity.UsersEntity;
+import com.ttnhat.shop.Tools.Mapping;
 import com.ttnhat.shop.Tools.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,6 +129,25 @@ public class OrderRepository implements IOrderRepository{
             entityManager.getTransaction().commit();
             entityManager.close();
             return orderedProductList;
+        } catch (RuntimeException e){
+            entityManager.getTransaction().rollback();
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<OrdersSummaryDTO> getOrdersSummary(Integer top) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            String sql = "select u from CustomerOrder u order by u.dateUpdate desc";
+            List<CustomerOrder> customerOrderList = entityManager.createQuery(sql, CustomerOrder.class)
+                    .setMaxResults(top)
+                    .getResultList();
+            List<OrdersSummaryDTO> ordersSummaryDTOList = Mapping.convertToOrdersDTO(customerOrderList);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            return ordersSummaryDTOList;
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
             throw new SQLException(e.getMessage());

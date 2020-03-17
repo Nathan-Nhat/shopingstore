@@ -1,5 +1,6 @@
 package com.ttnhat.shop.DAO.NormalDAO;
 
+import com.ttnhat.shop.Controller.ResponseObject.OrdersSummaryDTO;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
 
@@ -12,4 +13,5 @@ public interface IOrderRepository {
     void changeStatusOrder(Integer id, String status);
 
     List<OrderedProduct> getAllOrder(String category, String status, String orderType);
+    List<OrdersSummaryDTO> getOrdersSummary(Integer top);
 }

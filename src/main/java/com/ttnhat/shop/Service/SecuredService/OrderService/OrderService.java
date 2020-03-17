@@ -1,5 +1,6 @@
 package com.ttnhat.shop.Service.SecuredService.OrderService;
 
+import com.ttnhat.shop.Controller.ResponseObject.OrdersSummaryDTO;
 import com.ttnhat.shop.DAO.NormalDAO.IOrderRepository;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
@@ -38,5 +39,10 @@ public class OrderService implements IOrderService{
     public List<OrderedProduct> getAllOrder(String category, String status, String type, String sort) {
         String orderType = Tools.convertStringToOrder(type, sort);
         return orderRepository.getAllOrder(category, status, orderType);
+    }
+
+    @Override
+    public List<OrdersSummaryDTO> getOrdersSummary(Integer top) {
+        return orderRepository.getOrdersSummary(top);
     }
 }

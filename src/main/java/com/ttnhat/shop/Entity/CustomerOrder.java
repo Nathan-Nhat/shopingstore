@@ -19,6 +19,8 @@ public class CustomerOrder {
     @Column(name = "date_create")
     private Date dateCreate;
 
+    @Column(name = "date_update")
+    private Date dateUpdate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private UsersEntity usersEntity;
@@ -69,6 +71,14 @@ public class CustomerOrder {
 
     public void setIsDone(String isDone) {
         this.isDone = isDone;
+    }
+
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
     }
 
     @Override
