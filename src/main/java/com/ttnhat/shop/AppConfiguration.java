@@ -2,7 +2,6 @@ package com.ttnhat.shop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -38,9 +37,5 @@ public class AppConfiguration implements WebMvcConfigurer {
                 mapper.registerModule(hibernate5Module);
             }
         }
-    }
-    @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
     }
 }

@@ -2,6 +2,7 @@ package com.ttnhat.shop.Controller.DashboardController;
 
 import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
+import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
 import com.ttnhat.shop.Controller.ResponseObject.ResponseObject;
 import com.ttnhat.shop.Service.DashboardService.IDashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,9 @@ public class DashboardController {
     public ResponseEntity<List<AnalystOrdersDTO>> getAnalystOrders(@RequestParam(name = "num-days") Integer numDays){
 
         return ResponseEntity.ok(dashboardService.getAnalystOrders(numDays));
+    }
+    @GetMapping(value = "/analyst/revenue")
+    public ResponseEntity<List<AnalystRevenueDTO>> getAnalystRevenue(@RequestParam(name = "num-days") Integer numDays){
+        return ResponseEntity.ok(dashboardService.getAnalystRevenue(numDays));
     }
 }

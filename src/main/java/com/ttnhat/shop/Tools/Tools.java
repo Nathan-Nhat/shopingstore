@@ -1,6 +1,7 @@
 package com.ttnhat.shop.Tools;
 
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
+import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,7 +67,7 @@ public class Tools {
         }
     }
 
-    static public List<AnalystOrdersDTO> fillEmptyDate(List<AnalystOrdersDTO> analystOrdersDTOS, Date beginDate){
+    static public List<AnalystOrdersDTO> fillEmptyDateOrders(List<AnalystOrdersDTO> analystOrdersDTOS, Date beginDate){
        List<AnalystOrdersDTO> result = new ArrayList<>();
         Date tempDate = beginDate;
 
@@ -83,6 +84,32 @@ public class Tools {
                 AnalystOrdersDTO temp = null;
                 try {
                     temp = new AnalystOrdersDTO(convertDateToNoTime(tempDate), new Long(0));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                result.add(temp);
+            }
+            tempDate = getAfterDate(tempDate, 1);
+        }
+        return result;
+    }
+    static public List<AnalystRevenueDTO> fillEmptyDateRevenue(List<AnalystRevenueDTO> analystRevenueDTOS, Date beginDate){
+        List<AnalystRevenueDTO> result = new ArrayList<>();
+        Date tempDate = beginDate;
+
+        Date nowDate = new Date();
+        int i = 0;
+        int length = analystRevenueDTOS.size();
+        while (compareDate(tempDate, nowDate) < 0) {
+            AnalystRevenueDTO element = analystRevenueDTOS.get(i);
+            if (compareDate(element.getDate(), tempDate) == 0 ){
+                result.add(element);
+                if (i < length - 1)
+                    i ++;
+            } else {
+                AnalystRevenueDTO temp = null;
+                try {
+                    temp = new AnalystRevenueDTO(convertDateToNoTime(tempDate), new Long(0));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

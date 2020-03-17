@@ -2,6 +2,7 @@ package com.ttnhat.shop.DAO.NormalDAO;
 
 import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
+import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -17,4 +18,5 @@ public interface IDashboardRepository {
     List<AnalystClickDTO> getAnalystClick(Date newDate);
 
     List<AnalystOrdersDTO> getAnalystOrders(Date newDate);
+    List<AnalystRevenueDTO> getAnalystRevenue(Date newDate);
 }

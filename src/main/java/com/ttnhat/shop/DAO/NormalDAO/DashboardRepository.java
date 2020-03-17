@@ -2,6 +2,7 @@ package com.ttnhat.shop.DAO.NormalDAO;
 
 import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
+import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,6 +145,35 @@ public class DashboardRepository implements IDashboardRepository{
             entityManager.getTransaction().commit();
             entityManager.close();
             return analystOrdersDTOList;
+        } catch (RuntimeException e){
+            entityManager.getTransaction().rollback();
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<AnalystRevenueDTO> getAnalystRevenue(Date newDate) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            String sql = "select cast(customer_order.date_create as date), sum(price * quantity)\n" +
+                    "from ordered_product\n" +
+                    "inner join  product on product.id = ordered_product.product_id\n"+
+                    "inner join customer_order on ordered_product.customer_order_id = customer_order.id\n" +
+                    "where customer_order.date_create > cast(:newDate as date)\n" +
+                    "group by cast(customer_order.date_create as date) order by cast(customer_order.date_create as date) asc";
+            List<Object[]> analystRevenueDTOS = entityManager.createNativeQuery(sql)
+                    .setParameter("newDate", newDate)
+                    .getResultList();
+            List<AnalystRevenueDTO> analystRevenueDTOList = new ArrayList<>();
+            for(Object[] objects : analystRevenueDTOS){
+                Date date = (Date)objects[0];
+                AnalystRevenueDTO analystRevenueDTO = new AnalystRevenueDTO(new Date(date.getTime()), new Long(objects[1].toString()));
+                analystRevenueDTOList.add(analystRevenueDTO);
+            }
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            return analystRevenueDTOList;
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
             throw new SQLException(e.getMessage());

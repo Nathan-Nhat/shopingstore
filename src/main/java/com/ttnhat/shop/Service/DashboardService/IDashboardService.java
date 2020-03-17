@@ -2,6 +2,7 @@ package com.ttnhat.shop.Service.DashboardService;
 
 import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
+import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface IDashboardService {
     List<AnalystClickDTO> getAnalystClick(Integer numDays);
 
     List<AnalystOrdersDTO> getAnalystOrders(Integer numDays);
+    List<AnalystRevenueDTO> getAnalystRevenue(Integer numDays);
 }
