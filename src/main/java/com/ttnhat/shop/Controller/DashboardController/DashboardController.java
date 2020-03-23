@@ -1,9 +1,6 @@
 package com.ttnhat.shop.Controller.DashboardController;
 
-import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
-import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
-import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
-import com.ttnhat.shop.Controller.ResponseObject.ResponseObject;
+import com.ttnhat.shop.Controller.ResponseObject.*;
 import com.ttnhat.shop.Service.DashboardService.IDashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +52,10 @@ public class DashboardController {
     @GetMapping(value = "/analyst/revenue")
     public ResponseEntity<List<AnalystRevenueDTO>> getAnalystRevenue(@RequestParam(name = "num-days") Integer numDays){
         return ResponseEntity.ok(dashboardService.getAnalystRevenue(numDays));
+    }
+    @GetMapping(value = "/analyst/users")
+    public ResponseEntity<List<UserDashBoardDTO>> getTopUsersOrder(@RequestParam(name = "num-days") Integer numDays,
+    @RequestParam(name = "top") Integer top){
+        return ResponseEntity.ok(dashboardService.getTopUsersOrder(numDays, top));
     }
 }

@@ -1,6 +1,8 @@
 package com.ttnhat.shop.Controller.ResponseObject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class OrdersSummaryDTO {
     private Integer id;
@@ -8,7 +10,7 @@ public class OrdersSummaryDTO {
     private Date dateUpdate;
     private long totalPrice;
     private String status;
-
+    private List<String> image = new ArrayList<>();
     public OrdersSummaryDTO(Integer id, String username, Date dateUpdate, long totalPrice, String status) {
         this.id = id;
         this.username = username;
@@ -55,5 +57,13 @@ public class OrdersSummaryDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<String> getImage() {
+        return image;
+    }
+
+    public void setImage(List<String> image) {
+        this.image = image;
     }
 }

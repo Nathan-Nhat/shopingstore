@@ -3,6 +3,7 @@ package com.ttnhat.shop.Service.DashboardService;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
+import com.ttnhat.shop.Controller.ResponseObject.UserDashBoardDTO;
 import com.ttnhat.shop.DAO.NormalDAO.IDashboardRepository;
 import com.ttnhat.shop.Tools.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,12 @@ public class DashboardService implements IDashboardService{
         Date newDate = Tools.findBeforeDays(numDays);
         List<AnalystRevenueDTO> tempList = dashboardRepository.getAnalystRevenue(newDate);
         return Tools.fillEmptyDateRevenue(tempList, newDate);
+    }
+
+    @Override
+    public List<UserDashBoardDTO> getTopUsersOrder(Integer numDays, Integer top) {
+        Date newDate = Tools.findBeforeDays(numDays);
+        List<UserDashBoardDTO> userDashBoardDTOS = dashboardRepository.getTopUsersOrder(newDate, top);
+        return userDashBoardDTOS;
     }
 }

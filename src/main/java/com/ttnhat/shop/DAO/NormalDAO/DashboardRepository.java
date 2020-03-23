@@ -3,6 +3,7 @@ package com.ttnhat.shop.DAO.NormalDAO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystClickDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystOrdersDTO;
 import com.ttnhat.shop.Controller.ResponseObject.AnalystRevenueDTO;
+import com.ttnhat.shop.Controller.ResponseObject.UserDashBoardDTO;
 import com.ttnhat.shop.ExceptionHandler.Exception.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,6 +176,41 @@ public class DashboardRepository implements IDashboardRepository{
             entityManager.getTransaction().commit();
             entityManager.close();
             return analystRevenueDTOList;
+        } catch (RuntimeException e){
+            entityManager.getTransaction().rollback();
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<UserDashBoardDTO> getTopUsersOrder(Date newDate, Integer top) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            String sql = "select user_details.user_id , users.username, user_details.name, sum(product.price * ordered_product.quantity) as total_amount from ordered_product\n" +
+                    "inner join product on ordered_product.product_id = product.id\n" +
+                    "inner join customer_order on customer_order.id = ordered_product.customer_order_id\n" +
+                    "inner join user_details on user_details.user_id = customer_order.customer_id\n" +
+                    "inner join users on user_details.user_id = users.id\n"+
+                    "where customer_order.date_create > :newDate\n" +
+                    "group by user_details.user_id order by total_amount desc\n" +
+                    "limit :top";
+            List<Object[]> userOrderTop = entityManager.createNativeQuery(sql)
+                    .setParameter("newDate", newDate)
+                    .setParameter("top", top)
+                    .getResultList();
+            List<UserDashBoardDTO> userDashBoardDTOS = new ArrayList<>();
+            for(Object[] objects : userOrderTop){
+                Integer userId = (Integer)objects[0];
+                String username = (String)objects[1];
+                long amountOrder = new Long(objects[3].toString());
+                String name     = (String) objects[2];
+                UserDashBoardDTO userDashBoardDTO = new UserDashBoardDTO(userId, username, amountOrder, name);
+                userDashBoardDTOS.add(userDashBoardDTO);
+            }
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            return userDashBoardDTOS;
         } catch (RuntimeException e){
             entityManager.getTransaction().rollback();
             throw new SQLException(e.getMessage());

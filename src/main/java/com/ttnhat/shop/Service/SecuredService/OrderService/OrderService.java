@@ -1,6 +1,8 @@
 package com.ttnhat.shop.Service.SecuredService.OrderService;
 
+import com.ttnhat.shop.Controller.ResponseObject.AllOrderUserDTO;
 import com.ttnhat.shop.Controller.ResponseObject.OrdersSummaryDTO;
+import com.ttnhat.shop.Controller.ResponseObject.OrdersSummaryOfUser;
 import com.ttnhat.shop.DAO.NormalDAO.IOrderRepository;
 import com.ttnhat.shop.Entity.CustomerOrder;
 import com.ttnhat.shop.Entity.OrderedProduct;
@@ -20,9 +22,9 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public List<CustomerOrder> getOrdersOfUser(String username, String status, String type, String sort) {
-            String orderType = Tools.convertStringToOrder(type, sort);
-            return orderRepository.getOrderByUser(username, status, orderType);
+    public List<AllOrderUserDTO> getOrderByUsername(String username, String type) {
+        List<AllOrderUserDTO> objects = orderRepository.getOrderByUsername(username, type);
+        return objects;
     }
 
     @Override
@@ -44,5 +46,10 @@ public class OrderService implements IOrderService{
     @Override
     public List<OrdersSummaryDTO> getOrdersSummary(Integer top) {
         return orderRepository.getOrdersSummary(top);
+    }
+
+    @Override
+    public OrdersSummaryOfUser getSummaryOrdersOfUser(String username) {
+        return orderRepository.getSummaryOrdersOfUser(username);
     }
 }

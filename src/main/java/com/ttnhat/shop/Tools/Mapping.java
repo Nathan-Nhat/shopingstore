@@ -15,13 +15,16 @@ public class Mapping {
            Integer id = element.getId();
            String name = element.getUsersEntity().getUserDetails().getName();
            Date updateTime = element.getDateUpdate();
+           List<String> imageProduct = new ArrayList<>();
            long totalPrice = 0;
            for (OrderedProduct orderedProduct : element.getOrderedProductList()){
                long price = (long) (orderedProduct.getQuantity() * orderedProduct.getProduct().getPrice());
                totalPrice = totalPrice + price;
+               imageProduct.add(orderedProduct.getProduct().getImageMain());
            }
            String isDone = element.getIsDone();
            OrdersSummaryDTO ordersSummaryDTO = new OrdersSummaryDTO(id, name, updateTime, totalPrice, isDone);
+           ordersSummaryDTO.setImage(imageProduct);
            ordersSummaryDTOList.add(ordersSummaryDTO);
         }
         return ordersSummaryDTOList;
